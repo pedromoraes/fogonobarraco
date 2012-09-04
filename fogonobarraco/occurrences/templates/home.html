@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Fogo no barraco</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+
+		<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+		<link rel="stylesheet" href="/static/css/normalize.css">
+		<link rel="stylesheet" href="/static/css/main.css">
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="/static/css/home.css">
+		<script src="/static/js/vendor/modernizr-2.6.1.min.js"></script>
+		
+		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		<script>
+		var map;
+		//https://maps.google.com/maps?q=pra%C3%A7a+da+s%C3%A9,+s%C3%A3o+paulo,+brazil&hl=pt-BR&ie=UTF8&ll=-23.550785,-46.634175&spn=0.001093,0.002064&sll=-23.550046,-46.637945&sspn=0.004372,0.008256&t=h&hnear=Pra%C3%A7a+da+S%C3%A9+-+S%C3%A9,+S%C3%A3o+Paulo,+Rep%C3%BAblica+Federativa+do+Brasil&z=20
+		function initialize() {
+			var mapOptions = {
+				zoom: 12,
+				center: new google.maps.LatLng(-23.550785,-46.634175),
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+	  	}
+		google.maps.event.addDomListener(window, 'load', initialize);
+		</script>
+	</head>
+	<body>
+		<!--[if lt IE 7]>
+			<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+		<![endif]-->
+
+		<h1>Fogo no barraco</h1>
+		<h2>Visualização dos incêndios em favelas paulistanas (<a href="http://bit.ly/NIzngh">http://bit.ly/NIzngh</a>)</h2>
+		
+		<!--CONTENT-->
+		<section id="filters">
+		
+		</section>
+
+		<div id="map_canvas"></div>
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
+		<script src="/static/js/plugins.js"></script>
+		<script src="/static/js/main.js"></script>
+
+		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+		<script>
+			var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+			(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+			g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+			s.parentNode.insertBefore(g,s)}(document,'script'));
+		</script>
+	</body>
+</html>
