@@ -17,21 +17,12 @@
 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="/static/css/home.css">
 		<script src="/static/js/vendor/modernizr-2.6.1.min.js"></script>
-		
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		<script>
-		var map;
-		//https://maps.google.com/maps?q=pra%C3%A7a+da+s%C3%A9,+s%C3%A3o+paulo,+brazil&hl=pt-BR&ie=UTF8&ll=-23.550785,-46.634175&spn=0.001093,0.002064&sll=-23.550046,-46.637945&sspn=0.004372,0.008256&t=h&hnear=Pra%C3%A7a+da+S%C3%A9+-+S%C3%A9,+S%C3%A3o+Paulo,+Rep%C3%BAblica+Federativa+do+Brasil&z=20
-		function initialize() {
-			var mapOptions = {
-				zoom: 12,
-				center: new google.maps.LatLng(-23.550785,-46.634175),
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-	  	}
-		google.maps.event.addDomListener(window, 'load', initialize);
-		</script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
+		<script src="/static/js/plugins.js"></script>
+		<script src="/static/js/main.js"></script>
 	</head>
 	<body>
 		<!--[if lt IE 7]>
@@ -47,11 +38,6 @@
 		</section>
 
 		<div id="map_canvas"></div>
-
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-		<script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
-		<script src="/static/js/plugins.js"></script>
-		<script src="/static/js/main.js"></script>
 
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 		<script>
