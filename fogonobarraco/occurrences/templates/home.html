@@ -34,7 +34,17 @@
 		
 		<!--CONTENT-->
 		<section id="filters">
-		
+			<ul>
+			{% for year in years %}
+				<li><input type="checkbox" name="{{ year }}" checked />{{ year }}</li>
+			{% endfor %}
+			</ul>
+			<dl id="links">
+				<dt><a href="https://docs.google.com/spreadsheet/ccc?key=0AmDlUHs6DSRYdEFydXhrUE9wYjFtNlNWN25yQm8ySkE&hl=en_US#gid=0" target="_blank">Fogo no barraco</a></dt>
+				<dd>Planilha com o levantamento dos incêndios</dd>
+				<dt><a href="http://www.rollingstone.com.br/edicao/56/arquitetura-da-destruicao" target="_blank">RollingStone</a></dt>
+				<dd>Arquitetura da Destruição</dd>
+			</dl>
 		</section>
 
 		<div id="map_canvas"></div>

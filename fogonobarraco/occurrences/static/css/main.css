@@ -296,3 +296,10 @@ textarea {
         page-break-after: avoid;
     }
 }
+
+ul, ol, li {
+    list-style: none;
+    text-indent: 0;
+    padding: 0;
+    margin: 0;
+}

@@ -3,8 +3,7 @@ function trace() {
 	if (window.console != undefined) console.log(args);
 }
 
-var map;
-var Engine = function() {
+var map, Engine = function() {
 	var items, markers = [], infoWindow, sheetID = '', basePath = '/', occurrencesCall = 'static/occurrences.json';
 	return {
 		init: function() {
@@ -30,6 +29,7 @@ var Engine = function() {
 		createMarkers: function() {
 			this.removeMarkers();
 			items.forEach(function(item) {
+				item.links = item.links.map(function(el,i) { return '<a href="'+el+'" target="_blank">'+(i+1)+'</a>'; }).join(', ');
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(item.coords[0], item.coords[1]),
 					map: map,
@@ -51,6 +51,7 @@ var Engine = function() {
 		}
 	}.init();
 }
+
 function initialize() {
 	var mapOptions = {
 		zoom: 12,

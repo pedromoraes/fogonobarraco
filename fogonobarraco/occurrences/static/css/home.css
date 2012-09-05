@@ -22,8 +22,17 @@ section#filters {
 	width: 200px;
 	height: 100%;
 	float: left;
+	padding: 20px;
+}
+
+li input[type="checkbox"] {
+	margin: 0 6px 0 0;
 }
 
 section#map {
 	
+}
+
+dl#links {
+	font-size: 10px;
 }
