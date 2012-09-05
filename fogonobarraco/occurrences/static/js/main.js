@@ -8,6 +8,7 @@ var map, Engine = function() {
 	return {
 		init: function() {
 			this.load();
+			$("section#filters ul#years input").change(this.filterMarkers.bind(this));
 			return this;
 		},
 		load: function() {
@@ -19,6 +20,15 @@ var map, Engine = function() {
 					trace('error loading data', data);
 				}
 			}.bind(this)).error(trace);
+		},
+		filterMarkers: function() {
+			markers.forEach(function(el) {
+				if (el && el.data && el.data.date) {
+					var year = el.data.date.split('/').pop(),
+						active = $("section#filters ul#years input[value=\""+year+"\"]").attr('checked') ? true : false;
+					el.setMap(active?map:null);
+				}
+			});
 		},
 		removeMarkers: function() {
 			markers.forEach(function(el) {
@@ -35,6 +45,7 @@ var map, Engine = function() {
 					map: map,
 					title: item.slum_name
 				});
+				marker.data = item;
 				google.maps.event.addListener(marker, 'click', function() {
 					if (infoWindow) infoWindow.close();
 					var content = '<div><dl><dt><strong>'+item.date+' - '+item.slum_name+'</strong></dt>',
@@ -47,6 +58,7 @@ var map, Engine = function() {
 		 			infoWindow = new google.maps.InfoWindow({content: content});
 					infoWindow.open(map,marker);
 				});
+				markers.push(marker);
 			});
 		}
 	}.init();

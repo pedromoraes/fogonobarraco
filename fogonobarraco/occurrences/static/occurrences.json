@@ -2,7 +2,7 @@
 	"success": true,
 	"occurrences": [
 		{"date": "08/01/2012", "slum_name": "Favela 1", "location": "Av Pres. Altino, Jaguare, Zona Oeste", "coords": [-23.56,-46.65], "population": 100, "destroyed": 44, "homeless": 50, "deaths": 10, "links": ["http://uol.com.br", "http://terra.com.br"], "obs": "xpto obs"}
-		,{"date": "08/01/2012", "slum_name": "Favela 2", "location": "Av Pres. Altino, Jaguare, Zona Oeste", "coords": [-23.52,-46.634175], "population": 100, "destroyed": 44, "homeless": 50, "deaths": 10, "links": ["http://uol.com.br", "http://terra.com.br"], "obs": "xpto obs"}
-		,{"date": "08/01/2012", "slum_name": "Favela 3", "location": "Av Pres. Altino, Jaguare, Zona Oeste", "coords": [-23.54,-46.64], "population": 100, "destroyed": 44, "homeless": 50, "deaths": 10, "links": ["http://uol.com.br", "http://terra.com.br"], "obs": "xpto obs"}
+		,{"date": "08/01/2011", "slum_name": "Favela 2", "location": "Av Pres. Altino, Jaguare, Zona Oeste", "coords": [-23.52,-46.634175], "population": 100, "destroyed": 44, "homeless": 50, "deaths": 10, "links": ["http://uol.com.br", "http://terra.com.br"], "obs": "xpto obs"}
+		,{"date": "08/01/2009", "slum_name": "Favela 3", "location": "Av Pres. Altino, Jaguare, Zona Oeste", "coords": [-23.54,-46.64], "population": 100, "destroyed": 44, "homeless": 50, "deaths": 10, "links": ["http://uol.com.br", "http://terra.com.br"], "obs": "xpto obs"}
 	]
 }
