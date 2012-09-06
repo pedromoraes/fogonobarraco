@@ -4,7 +4,7 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('occurrences.views',
     # Examples:
     # url(r'^$', 'fogonobarraco.views.home', name='home'),
     # url(r'^fogonobarraco/', include('fogonobarraco.foo.urls')),
@@ -14,7 +14,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'occurrences.views.home', name='home'),  
-    (r'^occurrences\.json', 'occurrences.views.get')
+    (r'^$', 'home'),  
+    (r'^occurrences\.json', 'get')
    
 )
