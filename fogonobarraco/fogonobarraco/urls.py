@@ -15,6 +15,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'occurrences.views.home', name='home'),  
-    url(r'^occurrences.json$', 'occurrences.views.get')
+    (r'^occurrences.json', 'occurrences.views.get')
    
 )
