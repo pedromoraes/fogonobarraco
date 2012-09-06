@@ -4,7 +4,7 @@ function trace() {
 }
 
 var map, Engine = function() {
-	var items, fireMarkers = [], infoWindow, sheetID = '', basePath = '/', occurrencesCall = 'static/occurrences.json',
+	var items, fireMarkers = [], infoWindow, sheetID = '', basePath = '/', occurrencesCall = 'occurrences.json',
 		fireMarkerImage = new google.maps.MarkerImage('/static/img/fire-marker/image.png',new google.maps.Size(48,48),new google.maps.Point(0,0),new google.maps.Point(24,48)),
 		fireMarkerShadow = new google.maps.MarkerImage('/static/img/fire-marker/shadow.png',new google.maps.Size(76,48),new google.maps.Point(0,0),new google.maps.Point(24,48)),
 		fireMarkerShape = { coord: [14,0,15,1,16,2,17,3,19,4,21,5,28,6,30,7,31,8,33,9,33,10,34,11,35,12,36,13,36,14,37,15,37,16,38,17,38,18,38,19,40,20,40,21,40,22,40,23,40,24,41,25,41,26,41,27,41,28,41,29,41,30,41,31,41,32,41,33,41,34,40,35,40,36,40,37,39,38,39,39,38,40,37,41,36,42,35,43,33,44,32,45,29,46,19,46,16,45,14,44,12,43,11,42,10,41,9,40,8,39,8,38,7,37,7,36,7,35,6,34,6,33,6,32,6,31,6,30,6,29,6,28,6,27,6,26,8,25,8,24,8,23,8,22,8,21,8,20,8,19,8,18,9,17,9,16,10,15,11,14,12,13,17,12,17,11,17,10,16,9,16,8,15,7,15,6,14,5,14,4,14,3,13,2,13,1,13,0,14,0], type: 'poly' },
@@ -21,6 +21,27 @@ var map, Engine = function() {
 		loadOcurrences: function() {
 			$.getJSON(basePath+occurrencesCall, function(data) {
 				if (data.success) {
+					items = data.occurrences.map(function(item) {
+						for (var s in item) {
+							switch (item[s]) {
+								case -1:
+								case "null":
+								case null:
+									item[s] = 'sem informa&ccedil;&atilde;o';
+									break;
+							}
+						}
+						return item;
+					}); 
+					this.createFireMarkers();
+				} else {
+					trace('error loading data', data);
+				}
+			}.bind(this)).error(trace);
+		},
+		loadIndices: function() {
+			$.getJSON(indicesCall, function(data) {
+				if (data.success) {
 					items = data.occurrences;
 					this.createFireMarkers();
 				} else {
@@ -30,9 +51,8 @@ var map, Engine = function() {
 		},
 		filterFireMarkers: function() {
 			fireMarkers.forEach(function(el) {
-				if (el && el.data && el.data.date) {
-					var year = el.data.date.split('/').pop(),
-						active = $("section#filters ul#years input[value=\""+year+"\"]").attr('checked') ? true : false;
+				if (el && el.data) {
+					var active = $("section#filters ul#years input[value=\""+el.data.year+"\"]").attr('checked') ? true : false;
 					el.setMap(active?map:null);
 				}
 			});
@@ -45,19 +65,23 @@ var map, Engine = function() {
 		},
 		createFireMarkers: function() {
 			this.removeFireMarkers();
+			
+			var urlEx = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+			
 			items.forEach(function(item) {
-				item.links = item.links.map(function(el,i) { return '<a href="'+el+'" target="_blank">'+(i+1)+'</a>'; }).join(', ');
+				var links = item.evidences ? item.evidences.split(/[(\s)(\n)(\r)]/) : [];
+				item.links = links.filter(function(el){return el?true:false}).map(function(el,i) { return el.match(urlEx) ? '<a href="'+el+'" target="_blank">'+(i+1)+'</a>' : el; }).join(', ');
 				var marker = new google.maps.Marker({
-					position: new google.maps.LatLng(item.coords[0], item.coords[1]),
+					position: new google.maps.LatLng(item.latitude, item.longitude),
 					map: map, icon: fireMarkerImage, shadow: fireMarkerShadow, shape: fireMarkerShape,
 					title: item.slum_name
 				});
 				marker.data = item;
 				google.maps.event.addListener(marker, 'click', function() {
 					if (infoWindow) infoWindow.close();
-					var content = '<div><dl><dt><strong>'+item.date+' - '+item.slum_name+'</strong></dt>',
+					var content = '<div><dl><dt><strong>'+item.formatted_date+' - '+item.slum_name+'</strong></dt>',
 						data = [['Endere&ccedil;o', 'location'],['Popula&ccedil;&atilde;o', 'population'],['Moradias destru&iacute;das', 'destroyed'],['Desabrigados', 'homeless'],
-							['V&iacute;timas fatais', 'deaths'], ['Links', 'links'], ['Obs.', 'obs']];
+							['V&iacute;timas fatais', 'deaths'], ['Links', 'links'], ['Obs.', 'comments']];
 					data.forEach(function(info) {
 						content += '<dt>'+info[0]+':</dt><dd>'+item[info[1]]+'</dd>';
 					});
@@ -75,7 +99,7 @@ function initialize() {
 	var mapOptions = {
 		zoom: 12,
 		center: new google.maps.LatLng(-23.550785,-46.634175),
-		mapTypeId: google.maps.MapTypeId.ROADMAP
+		mapTypeId: google.maps.MapTypeId.HYBRID
 	};
 	map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 	engine = new Engine();
