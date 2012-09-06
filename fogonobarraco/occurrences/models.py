@@ -1,6 +1,4 @@
 from django.db import models
-from spreadsheet_parser import *
-
 
 class Occurrence(models.Model):
 	slum_name = models.CharField(max_length=300)
