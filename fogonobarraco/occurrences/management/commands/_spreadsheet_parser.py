@@ -5,7 +5,7 @@ import re
 
 class SpreadsheetParser():
 		#TODO: hackear essa lib pra não exigir que logue para acessar arquivos publicos
-		gc = gspread.login('malungo@gmail.com','jur3m400')
+		gc = gspread.login('email@gmail.com','pass')
 		sh = gc.open_by_key('0AmDlUHs6DSRYdEFydXhrUE9wYjFtNlNWN25yQm8ySkE')
 
 		#indexes
