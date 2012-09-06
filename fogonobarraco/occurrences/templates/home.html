@@ -34,9 +34,9 @@
 		
 		<!--CONTENT-->
 		<section id="filters">
-			<ul>
+			<ul id="years">
 			{% for year in years %}
-				<li><input type="checkbox" name="{{ year }}" checked />{{ year }}</li>
+				<li><input type="checkbox" name="cb_{{ year }}" value="{{ year }}" checked />{{ year }}</li>
 			{% endfor %}
 			</ul>
 			<dl id="links">
