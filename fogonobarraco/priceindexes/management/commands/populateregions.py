@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 import datetime
 import exceptions
 from priceindexes.models import *
-from geopy import geocoders
+from geopy import geocoders, distance, Point
 from unidecode import unidecode
 import time, urllib, simplejson
 
@@ -22,13 +22,17 @@ class Command(BaseCommand):
 			
 		Region.objects.all().delete()
 
+		sp = Point(-23.548999,-46.63854)
+
 		for r in str(val).split(','):
 			print r
 			o = Region()
 			o.name = r
 			g = geocoders.Google()
 			for place, (lat, lng) in g.geocode(unidecode(r) + ", Sao Paulo, Brazil", exactly_one=False):
-				if (Region.objects.filter(latitude=lat,longitude=lng).count() == 0):
+				p = Point(lat, lng)
+				d = distance.distance(sp, p)
+				if (d < 50 and Region.objects.filter(latitude=lat,longitude=lng).count() == 0):
 					o.latitude = lat
 					o.longitude = lng
 					
