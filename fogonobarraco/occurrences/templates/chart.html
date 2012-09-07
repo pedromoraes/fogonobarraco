@@ -1,5 +1,10 @@
 <html>
   <head>
+  	<title>{{ region }}</title>
+	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+	<style>
+		h1 { padding-top: 30px; text-align: center; font-family: 'Source Sans Pro', sans-serif; }
+	</style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript">
@@ -24,6 +29,11 @@
 	</script>
   </head>
   <body style="padding:0;margin:0">
-	<div id="chart_div" style="width: 100%; height: 200px;"></div>
+    {% if full %}
+		<h1>{{ region }}</h1>
+		<div id="chart_div" style="width: 100%; height: 800px;"></div>
+	{% else %}
+		<div id="chart_div" style="width: 100%; height: 200px;"></div>
+	{% endif %}
   </body>
 </html>

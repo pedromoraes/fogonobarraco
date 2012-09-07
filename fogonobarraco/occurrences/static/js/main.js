@@ -82,7 +82,9 @@ var map, Engine = function() {
 			
 			items.forEach(function(item) {
 				var links = item.evidences ? item.evidences.split(/[(\s)(\n)(\r)]/) : [];
-				item.links = links.filter(function(el){return el?true:false}).map(function(el,i) { return el.match(urlEx) ? '<a href="'+el+'" target="_blank">'+(i+1)+'</a>' : el; }).join(', ');
+				item.links = links.filter(function(el){return el?true:false}).map(function(el,i) { return el.match(urlEx) ? '<a href="'+el+'" target="_blank">Link '+(i+1)+'</a>' : el; }).join(', ');
+				var comments = item.comments ? item.comments.split(/[(\s)(\n)(\r)]/) : [];
+				item.comments = comments.filter(function(el){return el?true:false}).map(function(el,i) { return el.match(urlEx) ? '<a href="'+el+'" target="_blank">Link '+(i+1)+'</a>' : el; }).join(', ');
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(item.latitude, item.longitude),
 					map: map, icon: fireMarkerImage, shadow: fireMarkerShadow, shape: fireMarkerShape,
@@ -113,7 +115,7 @@ var map, Engine = function() {
 				});
 				marker.data = region;
 				google.maps.event.addListener(marker, 'click', function() {
-					var content = '<div><p><strong>'+region.name+'</strong></p>';
+					var content = '<div><p><strong>'+region.name+'</strong> - <a target="_blank" href="/chart/'+region.pk+'/?full=1">ampliar gr&aacute;fico</a></p>';
 					content += '<iframe id="chart" frameborder=0 src="/chart/'+region.pk+'/" style="width: 300px; height: 200px;"></iframe>'
 					content += '</div>';
 					regionInfoWindow = new google.maps.InfoWindow({content: content});

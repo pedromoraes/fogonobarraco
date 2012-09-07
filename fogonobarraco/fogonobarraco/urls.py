@@ -18,6 +18,6 @@ urlpatterns = patterns('',
     (r'^occurrences\.json', 'occurrences.views.get'),
     (r'^regions\.json', 'priceindexes.views.regions'),
     (r'^region/(?P<id>\d+)/indices\.json', 'priceindexes.views.indices'),
-    (r'^chart/(?P<id>\d+)/', 'occurrences.views.chart')
+    (r'^chart/(?P<id>\d+)/$', 'priceindexes.views.chart')
    
 )

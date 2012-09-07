@@ -22,3 +22,8 @@ def indices(request, id):
 	j = urllib.urlopen(url).read()
 	indices = simplejson.loads(j)
 	return HttpResponse(simplejson.dumps({"success": True, "indices": indices}),'application/json')
+	
+def chart(request, id, full = False):  
+	region = Region.objects.get(pk=id)
+	c = Context({ 'id': id, 'region': region.name, 'full': 'full' in request.GET })  
+	return render_to_response("chart.html", c, context_instance=RequestContext(request))
