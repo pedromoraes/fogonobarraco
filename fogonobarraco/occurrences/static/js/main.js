@@ -4,18 +4,22 @@ function trace() {
 }
 
 var map, Engine = function() {
-	var items, fireMarkers = [], infoWindow, sheetID = '', basePath = '/', occurrencesCall = 'occurrences.json',
-		fireMarkerImage = new google.maps.MarkerImage('/static/img/fire-marker/image.png',new google.maps.Size(48,48),new google.maps.Point(0,0),new google.maps.Point(24,48)),
+	var items, regions, fireMarkers = [], regionMarkers = [], fireInfoWindow, regionInfoWindow, sheetID = '', basePath = '/', occurrencesCall = 'occurrences.json', regionsCall = 'regions.json',
+		indicesCall = "region/[id]/indices.json",
+		kmlLayer = new google.maps.KmlLayer('https://www.google.com/fusiontables/exporttable?query=select+col14+from+1OHwE-92Rsy3z8LNeG4SBNTmHwoHT1G839qAH5Ac&amp;o=kmllink&amp;g=col14'), 
+		fireMarkerImage = new google.maps.MarkerImage('/static/img/fire-marker/image.png',new google.maps.Size(32,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
 		fireMarkerShadow = new google.maps.MarkerImage('/static/img/fire-marker/shadow.png',new google.maps.Size(76,48),new google.maps.Point(0,0),new google.maps.Point(24,48)),
-		fireMarkerShape = { coord: [14,0,15,1,16,2,17,3,19,4,21,5,28,6,30,7,31,8,33,9,33,10,34,11,35,12,36,13,36,14,37,15,37,16,38,17,38,18,38,19,40,20,40,21,40,22,40,23,40,24,41,25,41,26,41,27,41,28,41,29,41,30,41,31,41,32,41,33,41,34,40,35,40,36,40,37,39,38,39,39,38,40,37,41,36,42,35,43,33,44,32,45,29,46,19,46,16,45,14,44,12,43,11,42,10,41,9,40,8,39,8,38,7,37,7,36,7,35,6,34,6,33,6,32,6,31,6,30,6,29,6,28,6,27,6,26,8,25,8,24,8,23,8,22,8,21,8,20,8,19,8,18,9,17,9,16,10,15,11,14,12,13,17,12,17,11,17,10,16,9,16,8,15,7,15,6,14,5,14,4,14,3,13,2,13,1,13,0,14,0], type: 'poly' },
-		chartMarkerImage = new google.maps.MarkerImage('/static/img/chart-marker/image.png',new google.maps.Size(64,64),new google.maps.Point(0,0),new google.maps.Point(32,64)),
-		chartMarkerShadow = new google.maps.MarkerImage('/static/img/chart-marker/shadow.png',new google.maps.Size(100,64),new google.maps.Point(0,0),new google.maps.Point(32,64)),
-		chartMarkerShape = { coord: [51,0,53,1,53,2,54,3,54,4,54,5,54,6,54,7,54,8,54,9,54,10,54,11,54,12,54,13,54,14,54,15,54,16,54,17,54,18,54,19,54,20,54,21,54,22,54,23,54,24,54,25,54,26,54,27,54,28,54,29,54,30,54,31,54,32,54,33,54,34,54,35,54,36,54,37,54,38,54,39,54,40,54,41,54,42,54,43,54,44,54,45,54,46,54,47,54,48,54,49,54,50,54,51,54,52,56,53,57,54,57,55,56,56,55,57,53,58,50,59,48,60,47,61,45,62,44,63,37,63,34,62,30,61,27,60,23,59,20,58,16,57,13,56,9,55,6,54,4,53,4,52,4,51,6,50,6,49,6,48,6,47,6,46,6,45,7,44,9,43,10,42,10,41,10,40,10,39,11,38,11,37,11,36,11,35,11,34,11,33,11,32,11,31,11,30,11,29,11,28,11,27,11,26,11,25,11,24,11,23,11,22,11,21,11,20,11,19,11,18,11,17,11,16,11,15,11,14,11,13,11,12,11,11,11,10,11,9,11,8,11,7,11,6,11,5,11,4,11,3,11,2,11,1,11,0,51,0], type: 'poly' };
+		fireMarkerShape = { coord: [10,0,10,1,12,2,14,3,19,4,21,5,22,6,23,7,23,8,24,9,25,10,25,11,25,12,26,13,27,14,27,15,27,16,27,17,27,18,27,19,27,20,27,21,27,22,27,23,27,24,26,25,26,26,25,27,24,28,23,29,21,30,20,31,11,31,10,30,8,29,7,28,6,27,5,26,5,25,4,24,4,23,4,22,4,21,4,20,4,19,4,18,4,17,5,16,5,15,5,14,5,13,5,12,5,11,6,10,7,9,8,8,11,7,11,6,10,5,9,4,9,3,9,2,8,1,8,0,10,0], type: 'poly' },
+		chartMarkerImage = new google.maps.MarkerImage('/static/img/chart-marker/image.png',new google.maps.Size(32,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
+		chartMarkerShadow = new google.maps.MarkerImage('/static/img/chart-marker/shadow.png',new google.maps.Size(52,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
+		chartMarkerShape = { coord: [26,0,27,1,27,2,27,3,27,4,27,5,27,6,27,7,27,8,27,9,27,10,27,11,27,12,27,13,27,14,27,15,27,16,27,17,27,18,27,19,27,20,27,21,27,22,27,23,27,24,27,25,27,26,27,27,27,28,24,29,23,30,21,31,19,31,15,30,12,29,8,28,5,27,2,26,3,25,3,24,3,23,3,22,4,21,5,20,5,19,5,18,5,17,5,16,5,15,5,14,5,13,5,12,5,11,5,10,5,9,5,8,5,7,5,6,5,5,5,4,5,3,5,2,5,1,5,0,26,0], type: 'poly' };
 
 	return {
 		init: function() {
 			this.loadOcurrences();
+			this.loadRegions();
 			$("section#filters ul#years input").change(this.filterFireMarkers.bind(this));
+			$("section#filters ul#overlays input").change(this.toggleRegionMarkers.bind(this));
 			return this;
 		},
 		loadOcurrences: function() {
@@ -39,15 +43,23 @@ var map, Engine = function() {
 				}
 			}.bind(this)).error(trace);
 		},
-		loadIndices: function() {
-			$.getJSON(indicesCall, function(data) {
+		loadRegions: function() {
+			$.getJSON(regionsCall, function(data) {
 				if (data.success) {
-					items = data.occurrences;
-					this.createFireMarkers();
+					regions = data.regions;
+					this.createRegionMarkers();
 				} else {
 					trace('error loading data', data);
 				}
 			}.bind(this)).error(trace);
+		},
+		toggleKmlLayer: function() {
+			var active = $("section#filters ul#overlays input").attr('checked') ? true : false;
+			kmlLayer.setMap(active?map:null);
+		},
+		toggleRegionMarkers: function() {
+			var active = $("section#filters ul#overlays input").attr('checked') ? true : false;
+			regionMarkers.forEach(function(el) { el.setMap(active?map:null); });
 		},
 		filterFireMarkers: function() {
 			fireMarkers.forEach(function(el) {
@@ -78,7 +90,7 @@ var map, Engine = function() {
 				});
 				marker.data = item;
 				google.maps.event.addListener(marker, 'click', function() {
-					if (infoWindow) infoWindow.close();
+					if (fireInfoWindow) fireInfoWindow.close();
 					var content = '<div><dl><dt><strong>'+item.formatted_date+' - '+item.slum_name+'</strong></dt>',
 						data = [['Endere&ccedil;o', 'location'],['Popula&ccedil;&atilde;o', 'population'],['Moradias destru&iacute;das', 'destroyed'],['Desabrigados', 'homeless'],
 							['V&iacute;timas fatais', 'deaths'], ['Links', 'links'], ['Obs.', 'comments']];
@@ -86,10 +98,29 @@ var map, Engine = function() {
 						content += '<dt>'+info[0]+':</dt><dd>'+item[info[1]]+'</dd>';
 					});
 					content += '</dl></div>';
-		 			infoWindow = new google.maps.InfoWindow({content: content});
-					infoWindow.open(map,marker);
+					fireInfoWindow = new google.maps.InfoWindow({content: content});
+					fireInfoWindow.open(map,marker);
 				});
 				fireMarkers.push(marker);
+			});
+		},
+		createRegionMarkers: function() {
+			regions.forEach(function(region) {
+				var marker = new google.maps.Marker({
+					position: new google.maps.LatLng(region.latitude, region.longitude),
+					map: map, icon: chartMarkerImage, shadow: chartMarkerShadow, shape: chartMarkerShape,
+					title: region.name, draggable: true
+				});
+				marker.data = region;
+				google.maps.event.addListener(marker, 'click', function() {
+					var content = '<div><p><strong>'+region.name+'</strong></p>';
+					content += '<iframe id="chart" frameborder=0 src="/chart/'+region.pk+'/" style="width: 300px; height: 200px;"></iframe>'
+					content += '</div>';
+					regionInfoWindow = new google.maps.InfoWindow({content: content});
+					regionInfoWindow.open(map,marker);										
+				});
+				marker.setMap(map);
+				regionMarkers.push(marker);
 			});
 		}
 	}.init();

@@ -9,7 +9,11 @@ import simplejson
 def home(request):  
 	c = Context({ 'years': settings.RESEARCH_YEARS })  
 	return render_to_response("home.html", c, context_instance=RequestContext(request))
-	
+
+def chart(request, id):  
+	c = Context({ 'id': id })  
+	return render_to_response("chart.html", c, context_instance=RequestContext(request))
+
 def get(request):
 	#return HttpResponse(serializers.serialize('json', Occurrence.objects.all()),'application/json')
 	all = []
