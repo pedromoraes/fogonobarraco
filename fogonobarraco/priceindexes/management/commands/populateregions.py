@@ -7,7 +7,7 @@ import exceptions
 from priceindexes.models import *
 from geopy import geocoders
 from unidecode import unidecode
-import time
+import time, urllib, simplejson
 
 class Command(BaseCommand):
 	args = '<regions>'
@@ -31,6 +31,13 @@ class Command(BaseCommand):
 				if (Region.objects.filter(latitude=lat,longitude=lng).count() == 0):
 					o.latitude = lat
 					o.longitude = lng
+					
+					name = unidecode(r.lower().replace(" ", "%20"))
+					url = "http://www.zap.com.br/imoveis/fipe-zap/ajax.aspx?metodo=obterdadosgraficoindicezapimoveis&tipo=apartamento&transacao=venda&estado=sao%20paulo&cidade=sao%20paulo&bairro=" + name + "&periodo=todoperiodo&qtddormitorios=0"
+					j = urllib.urlopen(url).read()
+					indices = simplejson.loads(j)
+					if len(indices) == 0: break
+					
 					o.save()
 					break
 			
