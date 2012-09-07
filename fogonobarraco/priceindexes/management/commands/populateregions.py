@@ -7,6 +7,7 @@ import exceptions
 from priceindexes.models import *
 from geopy import geocoders
 from unidecode import unidecode
+import time
 
 class Command(BaseCommand):
 	args = '<regions>'
@@ -31,4 +32,7 @@ class Command(BaseCommand):
 					o.latitude = lat
 					o.longitude = lng
 					o.save()
-					break  
+					break
+			
+			time.sleep(2)
+			  
