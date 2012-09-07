@@ -34,7 +34,10 @@ class Command(BaseCommand):
 		for row in rows:
 			o = Occurrence()	
 			o.slum_name = row['slum_name']
-			o.date = datetime.datetime.strptime(row['date'], '%d/%m/%Y')
+			try:
+				o.date = datetime.datetime.strptime(row['date'], '%d/%m/%Y')
+			except exceptions.ValueError:
+				continue
 			o.location = row['location']
 			o.latitude = row['latitude']
 			o.longitude = row['longitude']

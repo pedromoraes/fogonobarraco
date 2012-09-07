@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<NetworkLink>
+<name><![CDATA[Favelas.kml]]></name>
+<Link>
+<href>
+https://www.google.com/fusiontables/exporttable?query=select+col14+from+1OHwE-92Rsy3z8LNeG4SBNTmHwoHT1G839qAH5Ac&amp;o=kmllink&amp;g=col14</href>
+</Link>
+</NetworkLink>
+</kml>
