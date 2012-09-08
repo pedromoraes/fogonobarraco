@@ -9,7 +9,7 @@ import exceptions
 
 class Command(BaseCommand):
 	args = '<year>'
-	help = 'Busca dados de ano específico'
+	help = 'Busca dados de anos específicos (ex: 2010-2012 ou 2008,2009,2010)'
 	
 	def to_num(self, s):
 		if (s == None):
@@ -20,16 +20,27 @@ class Command(BaseCommand):
 			return -1
 	
 	def handle(self, *args, **options):
-		print args
+		year_selection = str(args[0])
+		self.user = str(args[1])
+		self.pwd = str(args[2])
+		
+		if 	year_selection.find('-') != -1:
+			a, b = 	year_selection.split('-')
+			years = range(int(a), int(b)+1)
+		else:
+			years = year_selection.split(',')
+		
+		print years
+		
+		for year in years:
+			self.consume(str(year))
 
-		year = str(args[0])
-		user = str(args[1])
-		pwd = str(args[2])
 
+	def consume(self, year):
 		Occurrence.objects.filter(year=int(year)).delete()
 
 		sheet = SpreadsheetParser()
-		rows = sheet.get_year_data(year, user, pwd)    
+		rows = sheet.get_year_data(year, self.user, self.pwd)    
 			
 		for row in rows:
 			o = Occurrence()	

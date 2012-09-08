@@ -40,10 +40,9 @@ class Command(BaseCommand):
 					url = "http://www.zap.com.br/imoveis/fipe-zap/ajax.aspx?metodo=obterdadosgraficoindicezapimoveis&tipo=apartamento&transacao=venda&estado=sao%20paulo&cidade=sao%20paulo&bairro=" + name + "&periodo=todoperiodo&qtddormitorios=0"
 					j = urllib.urlopen(url).read()
 					indices = simplejson.loads(j)
-					if len(indices) == 0: break
-					
-					o.save()
-					break
+					if len(indices) > 0:
+						o.save()
+						break
 			
 			time.sleep(2)
 			  
