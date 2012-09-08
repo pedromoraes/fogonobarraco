@@ -70,6 +70,7 @@ class SpreadsheetParser():
 							p = re.compile('(?<=q=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
 							coords = p.findall(worksheet.cell(i, cols['MAP_INDEX']+1).value)
 					else:
+						#TODO: usar geocode pra buscar por endereço
 						coords = '0,0'
 
 					print coords
