@@ -2,6 +2,8 @@
 
 import gspread
 import re
+from geopy import geocoders, distance, Point
+from unidecode import unidecode
 
 class SpreadsheetParser():
 		#TODO: hackear essa lib pra não exigir que logue para acessar arquivos publicos
@@ -9,18 +11,6 @@ class SpreadsheetParser():
 		#pwd = raw_input('password: ')
 
 		#indexes
-		DATE_INDEX = 0
-		SLUM_NAME_INDEX = 1 
-		LOCATION_INDEX = 2
-		POPULATION_INDEX = 3
-		DESTROYED_INDEX = 4
-		HOMELESS_INDEX = 5
-		DEATHS_INDEX = 6
-		EVIDENCES_INDEX = 7
-		COMMENTS_INDEX = 8
-		MAP_INDEX = 9
-		
-		INITIAL_ROW_INDEX = 5
 		
 		cols = {'A':{'DATE_INDEX':0, 'SLUM_NAME_INDEX':1, 'LOCATION_INDEX':2, 'POPULATION_INDEX':3, 'DESTROYED_INDEX':4, 
 				'HOMELESS_INDEX':5, 'DEATHS_INDEX':6, 'EVIDENCES_INDEX':7, 'COMMENTS_INDEX':8, 'MAP_INDEX':9, 'INITIAL_ROW_INDEX':5},
@@ -62,22 +52,37 @@ class SpreadsheetParser():
 					row['deaths'] = worksheet.cell(i, cols['DEATHS_INDEX']+1).value
 					row['evidences'] = worksheet.cell(i, cols['EVIDENCES_INDEX']+1).value
 					row['comments'] = worksheet.cell(i, cols['COMMENTS_INDEX']+1).value
+					row['latitude'] = row['longitude'] = 0
 					
-					if(worksheet.cell(i, cols['MAP_INDEX']+1).value != None):					
+					print worksheet.cell(i, cols['MAP_INDEX']+1).value
+					
+					if(worksheet.cell(i, cols['MAP_INDEX']+1).value != None):	
+						print 'map'				
 						p = re.compile('(?<=.ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
 						coords = p.findall(worksheet.cell(i, cols['MAP_INDEX']+1).value)
 						if len(coords) == 0:
 							p = re.compile('(?<=q=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
 							coords = p.findall(worksheet.cell(i, cols['MAP_INDEX']+1).value)
-					else:
-						#TODO: usar geocode pra buscar por endereço
-						coords = '0,0'
-
-					print coords
-					if (len(coords) and len(coords[0].split(",")) == 2):
-						row['latitude'] = coords[0].split(",")[0]
-						row['longitude'] = coords[0].split(",")[1]
-						rows.append(row)
+						if (len(coords) and len(coords[0].split(",")) == 2):
+							row['latitude'] = coords[0].split(",")[0]
+							row['longitude'] = coords[0].split(",")[1]							
+					elif(row['location'] != None):
+						print 'geo'
+						g = geocoders.Google()
+						sp = Point(-23.548999,-46.63854)
+						add = unidecode(row['location'])
+						print add
+						
+						for place, (lat, lng) in g.geocode(add + ", Sao Paulo, Brazil", exactly_one=False):
+							p = Point(lat, lng)
+							d = distance.distance(sp, p)
+							if (d < 50):
+								row['latitude'] = lat
+								row['longitude'] = lng
+								
+					print row
+					rows.append(row)
+					
 				return rows
 
 			
