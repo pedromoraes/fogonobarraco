@@ -21,7 +21,7 @@ class Command(BaseCommand):
 			val = args[0]
 			
 		Region.objects.all().delete()
-
+		
 		sp = Point(-23.548999,-46.63854)
 
 		for r in str(val).split(','):
