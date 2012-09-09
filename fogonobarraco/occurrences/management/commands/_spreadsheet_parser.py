@@ -82,7 +82,7 @@ class SpreadsheetParser():
 								if (d < 50):
 									coords = [str(lat)+','+str(lng)]
 									break
-						except geopy.geocoders.google.GQueryError:
+						except Exception:
 							print 'GQueryError'
 							
 					if (len(coords) and len(coords[0].split(",")) == 2):
