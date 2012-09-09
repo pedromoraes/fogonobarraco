@@ -78,13 +78,11 @@ var map, Engine = function() {
 		createFireMarkers: function() {
 			this.removeFireMarkers();
 			
-			var urlEx = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+			var urlEx = new RegExp(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi);
 			
 			items.forEach(function(item) {
-				var links = item.evidences ? item.evidences.split(/[(\s)(\n)(\r)]/) : [];
-				item.links = links.filter(function(el){return el?true:false}).map(function(el,i) { return el.match(urlEx) ? '<a href="'+el+'" target="_blank">Link '+(i+1)+'</a>' : el; }).join(', ');
-				var comments = item.comments ? item.comments.split(/[(\s)(\n)(\r)]/) : [];
-				item.comments = comments.filter(function(el){return el?true:false}).map(function(el,i) { return el.match(urlEx) ? '<a href="'+el+'" target="_blank">Link '+(i+1)+'</a>' : el; }).join(', ');
+				item.links = item.evidences ? item.evidences.replace(urlEx,"<a href='$1' target='_blank'>$1</a>") : '';
+				item.comments = item.comments ? item.comments.replace(urlEx,"<a href='$1' target='_blank'>$1</a>") : '';
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(item.latitude, item.longitude),
 					map: map, icon: fireMarkerImage, shadow: fireMarkerShadow, shape: fireMarkerShape,
