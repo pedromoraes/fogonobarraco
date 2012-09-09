@@ -29,7 +29,7 @@ class Command(BaseCommand):
 			years = range(int(a), int(b)+1)
 		else:
 			years = year_selection.split(',')
-		
+
 		print years
 		
 		for year in years:
