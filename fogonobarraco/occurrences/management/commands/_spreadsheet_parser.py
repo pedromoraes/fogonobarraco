@@ -82,9 +82,9 @@ class SpreadsheetParser():
 								if (d < 50):
 									coords = [str(lat)+','+str(lng)]
 									break
+						except geopy.geocoders.google.GQueryError:
+							print 'GQueryError'
 							
-
-					print coords
 					if (len(coords) and len(coords[0].split(",")) == 2):
 						row['latitude'] = coords[0].split(",")[0]
 						row['longitude'] = coords[0].split(",")[1]
