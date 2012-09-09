@@ -39,11 +39,11 @@ class SpreadsheetParser():
 
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
 					row_values = worksheet.row_values(i)					
-					
+
 					if (ws_type == 'B' and worksheet.cell(i, 2).value != 'Favela'): continue
 					row = {}
 					row['date'] = worksheet.cell(i, cols['DATE_INDEX']+1).value
-					
+
 					if (row['date'] == None): continue
 					row['slum_name'] = worksheet.cell(i, cols['SLUM_NAME_INDEX']+1).value
 					if (isinstance(cols['LOCATION_INDEX'], (list, tuple))):
