@@ -22,7 +22,7 @@ class SpreadsheetParser():
 		
 				gc = gspread.login(user, pwd)
 				sh = gc.open_by_key('0AmDlUHs6DSRYdEFydXhrUE9wYjFtNlNWN25yQm8ySkE')
-
+				
 				worksheet = sh.worksheet(year) 
 				col_count = 10
 				row_count = len(worksheet.col_values(2))
@@ -34,13 +34,12 @@ class SpreadsheetParser():
 				else:
 					ws_type = 'A'
 					
-				print ws_type
+				print ws_type, row_count
 				cols = self.cols[ws_type]
-
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
 					row_values = worksheet.row_values(i)					
-					
-					if (ws_type == 'B' and worksheet.cell(i, 2).value != 'Favela'): continue
+					print row_values				
+					if (ws_type == 'B' and worksheet.cell(i, 2).value.lower() != 'favela'): continue
 					row = {}
 					row['date'] = worksheet.cell(i, cols['DATE_INDEX']+1).value
 					
@@ -57,7 +56,9 @@ class SpreadsheetParser():
 					row['deaths'] = worksheet.cell(i, cols['DEATHS_INDEX']+1).value
 					row['evidences'] = worksheet.cell(i, cols['EVIDENCES_INDEX']+1).value
 					row['comments'] = worksheet.cell(i, cols['COMMENTS_INDEX']+1).value
-					if (ws_type == 'B'): row['comments'] = str(row['comments']) + ' Fonte: Defesa Civil'
+					if (ws_type == 'B'):
+						if row['comments'] == None: row['comments']  = 'Fonte: Defesa civil'
+						else: row['comments'] = str(row['comments']) + ' Fonte: Defesa Civil'
 					
 					print row
 					sp = Point(-23.548999,-46.63854)
@@ -72,13 +73,15 @@ class SpreadsheetParser():
 					elif (row['location'] != None):
 						#TODO: usar geocode pra buscar por endereço
 						print 'geocode'
-						g = geocoders.Google()
-						for place, (lat, lng) in g.geocode(unidecode(row['location']) + ", Sao Paulo, Brazil", exactly_one=False):
-							p = Point(lat, lng)
-							d = distance.distance(p, sp)
-							print d
-							if (d < 50):
-								coords = [str(lat)+','+str(lng)]
+						try:
+							g = geocoders.Google()
+							for place, (lat, lng) in g.geocode(unidecode(row['location']) + ", Sao Paulo, Brazil", exactly_one=False):
+								p = Point(lat, lng)
+								d = distance.distance(p, sp)
+								print d
+								if (d < 50):
+									coords = [str(lat)+','+str(lng)]
+									break
 							
 
 					print coords
