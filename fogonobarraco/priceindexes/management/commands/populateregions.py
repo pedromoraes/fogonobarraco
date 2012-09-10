@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
 		regions = str(val).split(',')
 		for r in str(val).split(','):
-			if (r.lower().find('vila') != -1): regions.append(r.lower().replace('vila', 'vl')) 
+			if (r.lower().find('vila') != -1): regions.append(r.lower().replace('vila', 'vl').title()) 
 
 		for r in regions:
 			print r
