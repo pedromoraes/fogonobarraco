@@ -37,41 +37,40 @@ class SpreadsheetParser():
 				print ws_type, row_count
 				cols = self.cols[ws_type]
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
-					row_values = worksheet.row_values(i)					
-					print row_values				
+					get = lambda x: worksheet.cell(i, x+1).value or ''
 					if (ws_type == 'B' and worksheet.cell(i, 2).value.lower() != 'favela'): continue
 					row = {}
-					row['date'] = worksheet.cell(i, cols['DATE_INDEX']+1).value
-					
+					row['date'] = get(cols['DATE_INDEX'])
 					if (row['date'] == None): continue
-					row['slum_name'] = worksheet.cell(i, cols['SLUM_NAME_INDEX']+1).value
+					
+					row['slum_name'] = get(cols['SLUM_NAME_INDEX'])
+
 					if (isinstance(cols['LOCATION_INDEX'], (list, tuple))):
-						f = lambda x: worksheet.cell(i, x+1).value or ''
-						row['location'] = ','.join(map(f, cols['LOCATION_INDEX']))
+						row['location'] = ','.join(map(get, cols['LOCATION_INDEX']))
 					else:
-						row['location'] = worksheet.cell(i, cols['LOCATION_INDEX']+1).value
-					row['population'] = worksheet.cell(i, cols['POPULATION_INDEX']+1).value
-					row['destroyed'] = worksheet.cell(i, cols['DESTROYED_INDEX']+1).value
-					row['homeless'] = worksheet.cell(i, cols['HOMELESS_INDEX']+1).value
-					row['deaths'] = worksheet.cell(i, cols['DEATHS_INDEX']+1).value
-					row['evidences'] = worksheet.cell(i, cols['EVIDENCES_INDEX']+1).value
-					row['comments'] = worksheet.cell(i, cols['COMMENTS_INDEX']+1).value
+						row['location'] = get(cols['LOCATION_INDEX'])
+					row['population'] = get(cols['POPULATION_INDEX'])
+					row['destroyed'] = get(cols['DESTROYED_INDEX'])
+					row['homeless'] = get(cols['HOMELESS_INDEX'])
+					row['deaths'] = get(cols['DEATHS_INDEX'])
+					row['evidences'] = get(cols['EVIDENCES_INDEX'])
+					row['comments'] = get(cols['COMMENTS_INDEX'])
 					if (ws_type == 'B'):
 						if row['comments'] == None: row['comments']  = 'Fonte: Defesa civil'
 						else: row['comments'] = str(row['comments']) + ' Fonte: Defesa Civil'
-					
+
 					print row
+
 					sp = Point(-23.548999,-46.63854)
-					mapaddress = worksheet.cell(i, cols['MAP_INDEX']+1).value != None
 					coords = ''
-					if(mapaddress):					
+
+					if (get(cols['MAP_INDEX'])):
 						p = re.compile('(?<=.ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
 						coords = p.findall(worksheet.cell(i, cols['MAP_INDEX']+1).value)
 						if len(coords) == 0:
 							p = re.compile('(?<=q=)-?\d+.?\d+,?-?\d+.?\d+')
 							coords = p.findall(worksheet.cell(i, cols['MAP_INDEX']+1).value)
-					elif (row['location'] != None):
-						#TODO: usar geocode pra buscar por endereço
+					elif (row['location']):
 						print 'geocode'
 						try:
 							g = geocoders.Google()
@@ -79,7 +78,7 @@ class SpreadsheetParser():
 								p = Point(lat, lng)
 								d = distance.distance(p, sp)
 								print d
-								if (d < 50):
+								if (d > 0.1 and d < 50):
 									coords = [str(lat)+','+str(lng)]
 									break
 						except Exception:
