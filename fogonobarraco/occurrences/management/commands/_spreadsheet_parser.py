@@ -38,7 +38,7 @@ class SpreadsheetParser():
 				cols = self.cols[ws_type]
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
 					get = lambda x: worksheet.cell(i, x+1).value or ''
-					if (ws_type == 'B' and worksheet.cell(i, 2).value.lower() != 'favela'): continue
+					if (ws_type == 'B' and get(1).lower() != 'favela'): continue
 					row = {}
 					row['date'] = get(cols['DATE_INDEX'])
 					if (row['date'] == None): continue

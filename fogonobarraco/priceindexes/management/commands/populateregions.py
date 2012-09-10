@@ -24,7 +24,11 @@ class Command(BaseCommand):
 		
 		sp = Point(-23.548999,-46.63854)
 
+		regions = str(val).split(',')
 		for r in str(val).split(','):
+			if (r.lower().find('vila') != -1): regions.append(r.lower().replace('vila', 'vl')) 
+
+		for r in regions:
 			print r
 			o = Region()
 			o.name = r
