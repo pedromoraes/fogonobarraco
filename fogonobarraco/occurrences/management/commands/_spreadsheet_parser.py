@@ -63,13 +63,13 @@ class SpreadsheetParser():
 
 					sp = Point(-23.548999,-46.63854)
 					coords = ''
-
-					if (get(cols['MAP_INDEX'])):
+					mapurl = get(cols['MAP_INDEX'])
+					if (mapurl):
 						p = re.compile('(?<=.ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
-						coords = p.findall(worksheet.cell(i, cols['MAP_INDEX']+1).value)
+						coords = p.findall(mapurl)
 						if len(coords) == 0:
 							p = re.compile('(?<=q=)-?\d+.?\d+,?-?\d+.?\d+')
-							coords = p.findall(worksheet.cell(i, cols['MAP_INDEX']+1).value)
+							coords = p.findall(mapurl)
 					elif (row['location']):
 						print 'geocode'
 						try:
