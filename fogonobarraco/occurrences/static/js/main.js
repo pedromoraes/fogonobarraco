@@ -109,7 +109,7 @@ var map, Engine = function() {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(region.latitude, region.longitude),
 					map: map, icon: chartMarkerImage, shadow: chartMarkerShadow, shape: chartMarkerShape,
-					title: region.name, draggable: true
+					title: region.name
 				});
 				marker.data = region;
 				google.maps.event.addListener(marker, 'click', function() {
