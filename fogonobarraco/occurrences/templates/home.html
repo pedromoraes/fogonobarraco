@@ -1,62 +1,129 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title>Fogo no barraco</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width">
-
-		<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-		<link rel="stylesheet" href="/static/css/normalize.css">
-		<link rel="stylesheet" href="/static/css/main.css">
-		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+		
 		<link rel="stylesheet" href="/static/css/home.css">
+		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
+<!-- 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'> -->
+		
 		<script src="/static/js/vendor/modernizr-2.6.1.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+		
 		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
 		<script src="/static/js/plugins.js"></script>
+		<script src="/static/js/window.js"></script>
 		<script src="/static/js/main.js"></script>
 	</head>
 	<body>
-		<!--[if lt IE 7]>
-			<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-		<![endif]-->
-		<section>
-			<h1>Fogo no barraco</h1>
-			<h2>Visualização dos incêndios em favelas paulistanas. <a href="/static/about.html">Sobre o projeto / como ajudar</a></h2>
-		</section>
+	
+		<div id="boxes">
+			<div id="sobre" class="window">
+				<a href="#" class="close"><font color="#FF0000">[x]</font></a><br />
+				<h1>Sobre</h1>
+				<br>
+				<p>Esse app é uma tentativa de investigação dos incontáveis incêndios que acontecem nas favelas paulistanas - em escala que não se vê, aparentemente, em outros lugares. Tudo o que é feito, por ora, é a projeção dos dados dessa <a href="http://bit.ly/NIzngh">planilha pública</a> sobre o mapa de SP.</p>
+			</div>
+			
+			<div id="ajude" class="window">
+				<a href="#" class="close"><font color="#FF0000">[x]</font></a>
+				<h1>Ajude</h1>
+				<br>
+				<p>Sobretudo, todos podem colaborar alimentando a <a href="http://bit.ly/NIzngh">planilha</a> criada por Patrícia Cornils, que é de acesso público. Os dados são importados para este aplicativo automaticamente, com um atraso de algumas horas.</p>
+				<p>Alguns cuidados na hora de inserir ocorrências:</p>
+				<ul>
+					<li>Certifique-se de que a entrada já não foi cadastrada. Caso já exista, apenas atualize-a com dados suplementares, se os tiver;</li> 
+					<li>Preencha tantos dados quanto puder encontrar, toda informação é valiosa. Os dados mínimos são de data, endereço e fonte da notícia;</li>
+					<li>Os campos com importâncias numéricas, tais como número de vítimas, casas destruídas, etc, cadastre como valores numéricos sempre que possível, em vez de texto corrido;</li>
+					<li>Para preencher a coluna mapa, localize o ponto da ocorrência no Google Maps, centralize-o na tela, clique no botão de geração de link (um clipe) e selecione a URL gerada (com opção URL curta <strong>desativada</strong>). Cole na planilha;</li>
+				</ul>
+			
+				<p>Programadores e designers podem ajudar a desenvolver este app. O código é aberto, essencialmente python e javascript, e está hospedado no <a href="https://github.com/pedromoraes/fogonobarraco">github</a>.</p>
+				
+				<p>Quem puder conseguir dados de fontes oficiais, como bombeiros e defesa civil, por favor entre em contato conosco. Os dados de até 2009 são da defesa civil e são muito mais numerosos do que os já levantados manualmente, de sorte que provavelmente será melhor contar com alguma fonte de dados pública...</p>
+			</div>
+			
+			<div id="materias" class="window">
+				<a href="#" class="close"><font color="#FF0000">[x]</font></a>
+				<h1>Matérias</h1>
+				<br>
+				<h2>Planilha com o levantamento dos incêndios</h2>
+				<a href="https://docs.google.com/spreadsheet/ccc?key=0AmDlUHs6DSRYdEFydXhrUE9wYjFtNlNWN25yQm8ySkE&hl=en_US#gid=0" target="_blank">Planilha pública (Google Docs)</a>
+				<br>
+				<br>
+				<h2>Rolling Stone: Arquitetura da Destruição</h2>
+				<p>Intimidações armadas, desapropriações truculentas e incêndios suspeitos se tornam as ferramentas da desenfreada especulação imobiliária para banir as favelas de São Paulo.</p>
+				<a href="http://www.rollingstone.com.br/edicao/56/arquitetura-da-destruicao" target="_blank">Link para matéria</a>
+				<br>
+				<br>
+				<h2>PET RI PUC-SP: Não acredite em combustão espontânea</h2>
+				<p>De acordo com o Corpo de Bombeiros do Estado de São Paulo, até o dia 3 de setembro de 2012, houve 32 incêndios em favelas do estado – cinco somente nas últimas semanas. O evento não é novo: em quatro anos foram registradas 540 ocorrências. Entretanto, a Comissão Parlamentar de Inquérito (CPI) criada em abril deste ano para investigar os incêndios segue parada, desrespeitando todos os trabalhadores brasileiros que tiveram suas moradias engolidas pelo fogo.</p>
+				<p>Juntamente com o alto número de incêndios, segue-se a suspeita: foram coincidências?</p>
+				<a href="http://petripuc.wordpress.com/2012/09/06/nao-acredite-em-combustao-espontanea/" target="_blank">Link para matéria</a>
+				<br>
+				<br>
+				<h2>Brasil de Fato: Em São Paulo, as áreas valorizadas são as que têm mais incêndios</h2>
+				<p>De acordo com pesquisa, das favelas que foram incendiadas nos últimos meses nove estão localizadas em regiões que o mercado imobiliário aumentou sua valorização: acima de 100%; na contramão, áreas que possuem mais favelas são as menos valorizadas</p>
+				<a href="http://www.brasildefato.com.br/node/10552" target="_blank">Link para matéria</a>
+			</div>
+			
+			<div id="contato" class="window">
+				<a href="#" class="close"><font color="#FF0000">[x]</font></a><br />
+				<h1>Contato</h1>
+				<br>
+				<p>Para nos enviar qualquer pergunta ou sugestão, criamos um e-mail do projeto: <a href="mailto:fogofavela@gmail.com">fogofavela@gmail.com</a></p>
+			</div>
+			
+			<div id="mask"></div>
+		</div>
 		
-		<!--CONTENT-->
-		<section id="filters">
-			<ul id="years">
-			{% for year in years %}
-				<li><input type="checkbox" name="cb_{{ year }}" value="{{ year }}" checked />{{ year }}</li>
-			{% endfor %}
+		<header class="jumbotron subhead" id="overview">
+			<ul class="thumbnails">
+				<li class="span4">
+					<h1>&nbsp;&nbsp;Fogo no Barraco</h1>
+				</li>
+				<li class="span2">
+					<h1><a href="#sobre" name="window">Sobre</a></h1>
+				</li>
+				<li class="span2">
+					<h1><a href="#ajude" name="window">Ajude</a></h1>
+				</li>
+				<li class="span2">
+					<h1><a href="#materias" name="window">Matérias</a></h1>
+				</li>
+				<li class="span2">
+					<h1><a href="#contato" name="window">Contato</a></h1>
+				</li>
 			</ul>
-			<ul id="overlays">
-				<li><input type="checkbox" name="cb_indices" value="indices" checked />Valorização imobiliária</li>
+		</header>
+		
+		<br>
+		
+		<div class="span3">
+			<h2>Filtros</h2>
+			<h3>Datas</h3>
+			<ul id="years" class="unstyled">
+				{% for year in years %}
+					<li><input type="checkbox" name="cb_{{ year }}" value="{{ year }}" checked /> {{ year }}</li>
+				{% endfor %}
 			</ul>
-			<dl id="links">
-				<dt><a href="https://docs.google.com/spreadsheet/ccc?key=0AmDlUHs6DSRYdEFydXhrUE9wYjFtNlNWN25yQm8ySkE&hl=en_US#gid=0" target="_blank">Fogo no barraco</a></dt>
-				<dd>Planilha com o levantamento dos incêndios</dd>
-				<dt><a href="http://www.rollingstone.com.br/edicao/56/arquitetura-da-destruicao" target="_blank">RollingStone</a></dt>
-				<dd>Arquitetura da Destruição</dd>
-				<dt><a href="http://petripuc.wordpress.com/2012/09/06/nao-acredite-em-combustao-espontanea/" target="_blank">PET RI PUC-SP</a></dt>
-				<dd>Não acredite em combustão espontânea</dd>
-				<dt><a href="http://www.brasildefato.com.br/node/10552" target="_blank">Brasil de Fato</a></dt>
-				<dd>Em São Paulo, as áreas valorizadas são as que têm mais incêndios</dd>
-			</dl>
-		</section>
-
+			<br>
+			<br>
+			<h3>Mais Informações</h3>
+			<ul id="overlays" class="unstyled">
+				<li><input type="checkbox" name="cb_indices" value="indices" checked /> Valorização imobiliária</li>
+			</ul>
+		</div>
+		
 		<div id="map_canvas"></div>
-
+		
+		<hr>
+		
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 		<script>
 			var _gaq=[['_setAccount','UA-34642587-1'],['_trackPageview']];
