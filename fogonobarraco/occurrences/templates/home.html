@@ -82,46 +82,53 @@
 			<div id="mask"></div>
 		</div>
 		
-		<header class="jumbotron subhead" id="overview">
-			<ul class="thumbnails">
-				<li class="span4">
-					<h1>&nbsp;&nbsp;Fogo no Barraco</h1>
-				</li>
-				<li class="span2">
-					<h1><a href="#sobre" name="window">Sobre</a></h1>
-				</li>
-				<li class="span2">
-					<h1><a href="#ajude" name="window">Ajude</a></h1>
-				</li>
-				<li class="span2">
-					<h1><a href="#materias" name="window">Matérias</a></h1>
-				</li>
-				<li class="span2">
-					<h1><a href="#contato" name="window">Contato</a></h1>
-				</li>
-			</ul>
-		</header>
+		<div id="page">
+			<div id="header">
+			
+				<header class="jumbotron subhead" id="overview">
+					<ul class="thumbnails">
+						<li class="span4">
+							<h1>Fogo no Barraco</h1>
+						</li>
+						<li class="span2">
+							<h1><a href="#sobre" name="window">Sobre</a></h1>
+						</li>
+						<li class="span2">
+							<h1><a href="#ajude" name="window">Ajude</a></h1>
+						</li>
+						<li class="span2">
+							<h1><a href="#materias" name="window">Matérias</a></h1>
+						</li>
+						<li class="span2">
+							<h1><a href="#contato" name="window">Contato</a></h1>
+						</li>
+					</ul>
+				</header>
+			
+			</div>
 		
-		<br>
 		
-		<div class="span3">
-			<h2>Filtros</h2>
-			<h3>Datas</h3>
-			<ul id="years" class="unstyled">
-				{% for year in years %}
-					<li><input type="checkbox" name="cb_{{ year }}" value="{{ year }}" checked /> {{ year }}</li>
-				{% endfor %}
-			</ul>
-			<br>
-			<br>
-			<h3>Mais Informações</h3>
-			<ul id="overlays" class="unstyled">
-				<li><input type="checkbox" name="cb_indices" value="indices" checked /> Valorização imobiliária</li>
-			</ul>
+			<div id="sidemenu">
+				<div class="span2">
+					<h2>Filtros</h2>
+					<h3>Datas</h3>
+					<ul id="years" class="unstyled">
+						{% for year in years %}
+							<li><input type="checkbox" name="cb_{{ year }}" value="{{ year }}" checked /> {{ year }}</li>
+						{% endfor %}
+					</ul>
+					<br>
+					<br>
+					<h3>Mais Informações</h3>
+					<ul id="overlays" class="unstyled">
+						<li><input type="checkbox" name="cb_indices" value="indices" checked /> Valorização imobiliária</li>
+					</ul>
+				</div>
+			</div>
+		
+			<div id="map_canvas"></div>
+		
 		</div>
-		
-		<div id="map_canvas"></div>
-		
 		<hr>
 		
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
