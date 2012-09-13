@@ -39,10 +39,8 @@ class SpreadsheetParser():
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
 					row_values = worksheet.row_values(i)
 					def get(x):
-						try:
-							ix = x if str(x).isnumeric() else cols[x];
-							return row_values[ix] or ''
-						except Exception: return ''
+						try: return row_values[cols[x]] or ''
+						except Exception: return 'exc'
 					print get('TYPE_INDEX')
 					if (ws_type == 'B' and get('TYPE_INDEX').lower() != 'favela'): continue
 					row = {}
@@ -51,8 +49,9 @@ class SpreadsheetParser():
 					
 					row['slum_name'] = get('SLUM_NAME_INDEX')
 
-					if (isinstance(cols['LOCATION_INDEX'], (list, tuple))):
-						row['location'] = ','.join(map(get, cols['LOCATION_INDEX']))
+					l = cols['LOCATION_INDEX']
+					if (isinstance(l, (list, tuple))):
+						row['location'] = ','.join((worksheet.cell(i, l[0]), worksheet.cell(i, l[1])))
 					else:
 						row['location'] = get('LOCATION_INDEX')
 					row['population'] = get('POPULATION_INDEX')
