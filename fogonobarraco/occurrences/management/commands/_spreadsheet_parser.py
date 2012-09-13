@@ -52,7 +52,9 @@ class SpreadsheetParser():
 
 					l = cols['LOCATION_INDEX']
 					if (isinstance(l, (list, tuple))):
-						row['location'] = ','.join((worksheet.cell(i, l[0]), worksheet.cell(i, l[1])))
+						locationcols = []
+						for lc in l: locationcols.append(worksheet.cell(i, lc+1).value or '')
+						row['location'] = ','.join(locationcols)
 					else:
 						row['location'] = get('LOCATION_INDEX')
 					row['population'] = get('POPULATION_INDEX')
