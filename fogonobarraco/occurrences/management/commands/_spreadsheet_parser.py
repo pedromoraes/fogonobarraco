@@ -37,10 +37,11 @@ class SpreadsheetParser():
 				print ws_type, row_count
 				cols = self.cols[ws_type]
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
+					print "\n\n\n NEW ROW:"
 					row_values = worksheet.row_values(i)
 					def get(x):
 						try: return row_values[cols[x]] or ''
-						except Exception: return 'exc'
+						except Exception: return ''
 					print get('TYPE_INDEX')
 					if (ws_type == 'B' and get('TYPE_INDEX').lower() != 'favela'): continue
 					row = {}
@@ -70,6 +71,7 @@ class SpreadsheetParser():
 					coords = ''
 					mapurl = get('MAP_INDEX')
 					if (mapurl):
+						print 'mapurl', mapurl
 						p = re.compile('(?<=ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
 						coords = p.findall(mapurl)
 						if len(coords) == 0:
