@@ -13,9 +13,9 @@ class SpreadsheetParser():
 		
 		INITIAL_ROW_INDEX = 5
 		
-		cols = {'A':{'DATE_INDEX':0, 'SLUM_NAME_INDEX':1, 'LOCATION_INDEX':2, 'POPULATION_INDEX':3, 'DESTROYED_INDEX':4, 
+		cols = {'A':{'TYPE_INDEX':-1, 'DATE_INDEX':0, 'SLUM_NAME_INDEX':1, 'LOCATION_INDEX':2, 'POPULATION_INDEX':3, 'DESTROYED_INDEX':4, 
 				'HOMELESS_INDEX':5, 'DEATHS_INDEX':6, 'EVIDENCES_INDEX':7, 'COMMENTS_INDEX':8, 'MAP_INDEX':9, 'INITIAL_ROW_INDEX':5},
-				'B':{'DATE_INDEX':3, 'SLUM_NAME_INDEX':0, 'LOCATION_INDEX':[5,6], 'POPULATION_INDEX':12, 'DESTROYED_INDEX':10, 
+				'B':{'TYPE_INDEX':1, 'DATE_INDEX':3, 'SLUM_NAME_INDEX':0, 'LOCATION_INDEX':[5,6], 'POPULATION_INDEX':12, 'DESTROYED_INDEX':10, 
 				'HOMELESS_INDEX':11, 'DEATHS_INDEX':8, 'EVIDENCES_INDEX':13, 'COMMENTS_INDEX':14, 'MAP_INDEX':15, 'INITIAL_ROW_INDEX':5}}
 
 		def get_year_data(self, year, user, pwd):
@@ -37,24 +37,32 @@ class SpreadsheetParser():
 				print ws_type, row_count
 				cols = self.cols[ws_type]
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
-					get = lambda x: worksheet.cell(i, x+1).value or ''
-					if (ws_type == 'B' and get(1).lower() != 'favela'): continue
+					print "\n\n\n NEW ROW:"
+					row_values = worksheet.row_values(i)
+					def get(x):
+						try: return row_values[cols[x]] or ''
+						except Exception: return ''
+					print get('TYPE_INDEX')
+					if (ws_type == 'B' and get('TYPE_INDEX').lower() != 'favela'): continue
 					row = {}
-					row['date'] = get(cols['DATE_INDEX'])
+					row['date'] = get('DATE_INDEX')
 					if (row['date'] == None): continue
 					
-					row['slum_name'] = get(cols['SLUM_NAME_INDEX'])
+					row['slum_name'] = get('SLUM_NAME_INDEX')
 
-					if (isinstance(cols['LOCATION_INDEX'], (list, tuple))):
-						row['location'] = ','.join(map(get, cols['LOCATION_INDEX']))
+					l = cols['LOCATION_INDEX']
+					if (isinstance(l, (list, tuple))):
+						locationcols = []
+						for lc in l: locationcols.append(worksheet.cell(i, lc+1).value or '')
+						row['location'] = ','.join(locationcols)
 					else:
-						row['location'] = get(cols['LOCATION_INDEX'])
-					row['population'] = get(cols['POPULATION_INDEX'])
-					row['destroyed'] = get(cols['DESTROYED_INDEX'])
-					row['homeless'] = get(cols['HOMELESS_INDEX'])
-					row['deaths'] = get(cols['DEATHS_INDEX'])
-					row['evidences'] = get(cols['EVIDENCES_INDEX'])
-					row['comments'] = get(cols['COMMENTS_INDEX'])
+						row['location'] = get('LOCATION_INDEX')
+					row['population'] = get('POPULATION_INDEX')
+					row['destroyed'] = get('DESTROYED_INDEX')
+					row['homeless'] = get('HOMELESS_INDEX')
+					row['deaths'] = get('DEATHS_INDEX')
+					row['evidences'] = get('EVIDENCES_INDEX')
+					row['comments'] = get('COMMENTS_INDEX')
 					if (ws_type == 'B'):
 						if row['comments'] == None: row['comments']  = 'Fonte: Defesa civil'
 						else: row['comments'] = str(row['comments']) + ' Fonte: Defesa Civil'
@@ -63,9 +71,10 @@ class SpreadsheetParser():
 
 					sp = Point(-23.548999,-46.63854)
 					coords = ''
-					mapurl = get(cols['MAP_INDEX'])
+					mapurl = get('MAP_INDEX')
 					if (mapurl):
-						p = re.compile('(?<=.ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
+						print 'mapurl', mapurl
+						p = re.compile('(?<=ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
 						coords = p.findall(mapurl)
 						if len(coords) == 0:
 							p = re.compile('(?<=q=)-?\d+.?\d+,?-?\d+.?\d+')
