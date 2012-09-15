@@ -5,8 +5,7 @@ function trace() {
 
 var map, Engine = function() {
 	var items, regions, fireMarkers = [], regionMarkers = [], fireInfoWindow, regionInfoWindow, sheetID = '', basePath = '/', occurrencesCall = 'occurrences.json', regionsCall = 'regions.json',
-		indicesCall = "region/[id]/indices.json",
-		kmlLayer = new google.maps.KmlLayer('https://www.google.com/fusiontables/exporttable?query=select+col14+from+1OHwE-92Rsy3z8LNeG4SBNTmHwoHT1G839qAH5Ac&amp;o=kmllink&amp;g=col14'), 
+		indicesCall = "region/[id]/indices.json", slumsKml, 
 		fireMarkerImage = new google.maps.MarkerImage('/static/img/fire-marker/image.png',new google.maps.Size(32,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
 		fireMarkerShadow = new google.maps.MarkerImage('/static/img/fire-marker/shadow.png',new google.maps.Size(76,48),new google.maps.Point(0,0),new google.maps.Point(24,48)),
 		fireMarkerShape = { coord: [10,0,10,1,12,2,14,3,19,4,21,5,22,6,23,7,23,8,24,9,25,10,25,11,25,12,26,13,27,14,27,15,27,16,27,17,27,18,27,19,27,20,27,21,27,22,27,23,27,24,26,25,26,26,25,27,24,28,23,29,21,30,20,31,11,31,10,30,8,29,7,28,6,27,5,26,5,25,4,24,4,23,4,22,4,21,4,20,4,19,4,18,4,17,5,16,5,15,5,14,5,13,5,12,5,11,6,10,7,9,8,8,11,7,11,6,10,5,9,4,9,3,9,2,8,1,8,0,10,0], type: 'poly' },
@@ -18,8 +17,10 @@ var map, Engine = function() {
 		init: function() {
 			this.loadOcurrences();
 			this.loadRegions();
+			this.loadSlums();
 			$("section#filters ul#years input").change(this.filterFireMarkers.bind(this));
-			$("section#filters ul#overlays input").change(this.toggleRegionMarkers.bind(this));
+			$("section#filters ul#overlays input[name=\"cb_indices\"]").change(this.toggleRegionMarkers.bind(this));
+			$("section#filters ul#overlays input[name=\"cb_slums\"]").change(this.toggleKmlLayer.bind(this));
 			return this;
 		},
 		loadOcurrences: function() {
@@ -53,12 +54,15 @@ var map, Engine = function() {
 				}
 			}.bind(this)).error(trace);
 		},
+		loadSlums: function() {
+			
+		},
 		toggleKmlLayer: function() {
-			var active = $("section#filters ul#overlays input").attr('checked') ? true : false;
+			var active = $("section#filters ul#overlays input[name=\"cb_indices\"]").attr('checked') ? true : false;
 			kmlLayer.setMap(active?map:null);
 		},
 		toggleRegionMarkers: function() {
-			var active = $("section#filters ul#overlays input").attr('checked') ? true : false;
+			var active = $("section#filters ul#overlays input[name=\"cb_slums\"]").attr('checked') ? true : false;
 			regionMarkers.forEach(function(el) { el.setMap(active?map:null); });
 		},
 		filterFireMarkers: function() {

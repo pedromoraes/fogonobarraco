@@ -9,7 +9,7 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
-RESEARCH_YEARS = 2004,2005,2006,2007,2008,2009,2010,2011,2012
+RESEARCH_YEARS = 2005,2006,2007,2008,2009,2010,2011,2012
 
 MANAGERS = ADMINS
 
@@ -122,8 +122,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'occurrences',

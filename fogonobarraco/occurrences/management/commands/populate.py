@@ -37,11 +37,12 @@ class Command(BaseCommand):
 
 
 	def consume(self, year):
-		Occurrence.objects.filter(year=int(year)).delete()
 
 		sheet = SpreadsheetParser()
 		rows = sheet.get_year_data(year, self.user, self.pwd)    
 			
+		Occurrence.objects.filter(year=int(year)).delete()
+		
 		for row in rows:
 			o = Occurrence()	
 			o.slum_name = row['slum_name']
