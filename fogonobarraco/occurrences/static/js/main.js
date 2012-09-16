@@ -117,7 +117,7 @@ var Engine = function() {
 			}.bind(this)).error(trace);
 		},
 		toggleRegionsLayer: function() {
-			var active = $("section#filters ul#overlays input[name=\"cb_indices\"]").attr('checked') ? true : false;
+			var active = $("section#filters ul#overlays input[name=\"cb_regions\"]").attr('checked') ? true : false;
 			regionsGeometries.forEach(function(el) { el.setMap(active?map:null); });
 		},
 		toggleIndicesMarkers: function() {
