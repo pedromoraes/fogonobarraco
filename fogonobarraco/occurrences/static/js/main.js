@@ -3,24 +3,50 @@ function trace() {
 	if (window.console != undefined) console.log(args);
 }
 
-var map, Engine = function() {
-	var items, regions, fireMarkers = [], regionMarkers = [], fireInfoWindow, regionInfoWindow, sheetID = '', basePath = '/', occurrencesCall = 'occurrences.json', regionsCall = 'regions.json',
+var map;
+
+function convertPoint(latLng) { 
+	var topRight = map.getProjection().fromLatLngToPoint(map.getBounds().getNorthEast());
+	var bottomLeft=map.getProjection().fromLatLngToPoint(map.getBounds().getSouthWest()); 
+	var scale = Math.pow(2,map.getZoom()); 
+	var worldPoint=map.getProjection().fromLatLngToPoint(latLng); 
+	return new google.maps.Point((worldPoint.x-bottomLeft.x)*scale,(worldPoint.y-topRight.y)*scale); 
+} 
+
+var Engine = function() {
+	var items, regions, indices, fireMarkers = [], regionsGeometries = [], indicesMarkers = [], fireInfoWindow, regionInfoWindow, sheetID = '', basePath = '/', occurrencesCall = 'occurrences.json', indexedRegionsCall = 'regions.json', regionsCall = 'static/distritos.json',
 		indicesCall = "region/[id]/indices.json", slumsKml, 
 		fireMarkerImage = new google.maps.MarkerImage('/static/img/fire-marker/image.png',new google.maps.Size(32,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
 		fireMarkerShadow = new google.maps.MarkerImage('/static/img/fire-marker/shadow.png',new google.maps.Size(76,48),new google.maps.Point(0,0),new google.maps.Point(24,48)),
 		fireMarkerShape = { coord: [10,0,10,1,12,2,14,3,19,4,21,5,22,6,23,7,23,8,24,9,25,10,25,11,25,12,26,13,27,14,27,15,27,16,27,17,27,18,27,19,27,20,27,21,27,22,27,23,27,24,26,25,26,26,25,27,24,28,23,29,21,30,20,31,11,31,10,30,8,29,7,28,6,27,5,26,5,25,4,24,4,23,4,22,4,21,4,20,4,19,4,18,4,17,5,16,5,15,5,14,5,13,5,12,5,11,6,10,7,9,8,8,11,7,11,6,10,5,9,4,9,3,9,2,8,1,8,0,10,0], type: 'poly' },
 		chartMarkerImage = new google.maps.MarkerImage('/static/img/chart-marker/image.png',new google.maps.Size(32,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
 		chartMarkerShadow = new google.maps.MarkerImage('/static/img/chart-marker/shadow.png',new google.maps.Size(52,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
-		chartMarkerShape = { coord: [26,0,27,1,27,2,27,3,27,4,27,5,27,6,27,7,27,8,27,9,27,10,27,11,27,12,27,13,27,14,27,15,27,16,27,17,27,18,27,19,27,20,27,21,27,22,27,23,27,24,27,25,27,26,27,27,27,28,24,29,23,30,21,31,19,31,15,30,12,29,8,28,5,27,2,26,3,25,3,24,3,23,3,22,4,21,5,20,5,19,5,18,5,17,5,16,5,15,5,14,5,13,5,12,5,11,5,10,5,9,5,8,5,7,5,6,5,5,5,4,5,3,5,2,5,1,5,0,26,0], type: 'poly' };
+		chartMarkerShape = { coord: [26,0,27,1,27,2,27,3,27,4,27,5,27,6,27,7,27,8,27,9,27,10,27,11,27,12,27,13,27,14,27,15,27,16,27,17,27,18,27,19,27,20,27,21,27,22,27,23,27,24,27,25,27,26,27,27,27,28,24,29,23,30,21,31,19,31,15,30,12,29,8,28,5,27,2,26,3,25,3,24,3,23,3,22,4,21,5,20,5,19,5,18,5,17,5,16,5,15,5,14,5,13,5,12,5,11,5,10,5,9,5,8,5,7,5,6,5,5,5,4,5,3,5,2,5,1,5,0,26,0], type: 'poly' },
+		tooltip, 
+		showTooltip = function(name, x, y) {
+			if (tooltip) hideTooltip();
+			tooltip = $('<div id="tooltip"></div>');
+			tooltip.text(name);
+			$('#map_canvas').prepend(tooltip);
+			x -= tooltip.width()/2;
+			y -= tooltip.height()/2 + 5;
+			tooltip.css({marginLeft:x,marginTop:y});
+		},
+		hideTooltip = function() {
+			if (tooltip) {
+				$(tooltip).remove();
+				tooltip = null;
+			}
+		};
 
 	return {
 		init: function() {
 			this.loadOcurrences();
+			this.loadIndices();
 			this.loadRegions();
-			this.loadSlums();
 			$("section#filters ul#years input").change(this.filterFireMarkers.bind(this));
-			$("section#filters ul#overlays input[name=\"cb_indices\"]").change(this.toggleRegionMarkers.bind(this));
-			$("section#filters ul#overlays input[name=\"cb_slums\"]").change(this.toggleKmlLayer.bind(this));
+			$("section#filters ul#overlays input[name=\"cb_indices\"]").change(this.toggleIndicesMarkers.bind(this));
+			$("section#filters ul#overlays input[name=\"cb_regions\"]").change(this.toggleRegionsLayer.bind(this));
 			return this;
 		},
 		loadOcurrences: function() {
@@ -44,26 +70,59 @@ var map, Engine = function() {
 				}
 			}.bind(this)).error(trace);
 		},
-		loadRegions: function() {
-			$.getJSON(regionsCall, function(data) {
+		loadIndices: function() {
+			$.getJSON(indexedRegionsCall, function(data) {
 				if (data.success) {
-					regions = data.regions;
-					this.createRegionMarkers();
+					indices = data.regions;
+					this.createIndicesMarkers();
 				} else {
 					trace('error loading data', data);
 				}
 			}.bind(this)).error(trace);
 		},
-		loadSlums: function() {
-			
+		loadRegions: function() {
+			$.getJSON(regionsCall, function(data) {
+				regions = data;
+				regions.forEach(function(item) {
+					var coords = $(item.geometria).text().split(' ');
+					var points = [];
+					var bounds = new google.maps.LatLngBounds();
+					coords.forEach(function(cs) {
+						var parts = cs.split(','), latlng = new google.maps.LatLng(parts[1], parts[0]);
+						points.push(latlng);
+						bounds.extend(latlng);
+					});
+					var poly = new google.maps.Polygon({
+						paths: points,
+						strokeWeight: 1,
+						strokeColor: '#f00',
+						strokeOpacity: 0.5,
+						fillColor: '#f00',
+						fillOpacity: 0.05,
+						cursor: 'default'
+					});
+					poly.bounds = bounds;
+					google.maps.event.addListener(poly, 'mouseover', function() {
+						this.setOptions({fillOpacity: 0.2, strokeColor: '#000'});
+						var center = convertPoint(this.bounds.getCenter()), x = center.x, y = center.y;
+						showTooltip(item.distrito, x, y);
+					});
+					google.maps.event.addListener(poly, 'mouseout', function(evt) {
+						this.setOptions({fillOpacity: 0.05, strokeColor: '#f00'});
+						if (evt.b.toElement != tooltip.get(0)) hideTooltip();
+					});
+					//poly.setMap(map);
+					regionsGeometries.push(poly);
+				});
+			}.bind(this)).error(trace);
 		},
-		toggleKmlLayer: function() {
+		toggleRegionsLayer: function() {
 			var active = $("section#filters ul#overlays input[name=\"cb_indices\"]").attr('checked') ? true : false;
-			kmlLayer.setMap(active?map:null);
+			regionsGeometries.forEach(function(el) { el.setMap(active?map:null); });
 		},
-		toggleRegionMarkers: function() {
-			var active = $("section#filters ul#overlays input[name=\"cb_slums\"]").attr('checked') ? true : false;
-			regionMarkers.forEach(function(el) { el.setMap(active?map:null); });
+		toggleIndicesMarkers: function() {
+			var active = $("section#filters ul#overlays input[name=\"cb_indices\"]").attr('checked') ? true : false;
+			indicesMarkers.forEach(function(el) { el.setMap(active?map:null); });
 		},
 		filterFireMarkers: function() {
 			fireMarkers.forEach(function(el) {
@@ -108,8 +167,8 @@ var map, Engine = function() {
 				fireMarkers.push(marker);
 			});
 		},
-		createRegionMarkers: function() {
-			regions.forEach(function(region) {
+		createIndicesMarkers: function() {
+			indices.forEach(function(region) {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(region.latitude, region.longitude),
 					map: map, icon: chartMarkerImage, shadow: chartMarkerShadow, shape: chartMarkerShape,
@@ -124,7 +183,7 @@ var map, Engine = function() {
 					regionInfoWindow.open(map,marker);										
 				});
 				marker.setMap(map);
-				regionMarkers.push(marker);
+				indicesMarkers.push(marker);
 			});
 		}
 	}.init();
