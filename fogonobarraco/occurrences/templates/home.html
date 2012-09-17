@@ -17,70 +17,9 @@
 		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 		<script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
 		<script src="/static/js/plugins.js"></script>
-		<script src="/static/js/window.js"></script>
 		<script src="/static/js/main.js"></script>
 	</head>
 	<body>
-	
-		<div id="boxes">
-			<div id="sobre" class="window">
-				<a href="#" class="close"><font color="#FF0000">[x]</font></a><br />
-				<h1>Sobre</h1>
-				<br>
-				<p>Esse app é uma tentativa de investigação dos incontáveis incêndios que acontecem nas favelas paulistanas - em escala que não se vê, aparentemente, em outros lugares. Tudo o que é feito, por ora, é a projeção dos dados dessa <a href="http://bit.ly/NIzngh">planilha pública</a> sobre o mapa de SP.</p>
-			</div>
-			
-			<div id="ajude" class="window">
-				<a href="#" class="close"><font color="#FF0000">[x]</font></a>
-				<h1>Ajude</h1>
-				<br>
-				<p>Sobretudo, todos podem colaborar alimentando a <a href="http://bit.ly/NIzngh">planilha</a> criada por Patrícia Cornils, que é de acesso público. Os dados são importados para este aplicativo automaticamente, com um atraso de algumas horas.</p>
-				<p>Alguns cuidados na hora de inserir ocorrências:</p>
-				<ul>
-					<li>Certifique-se de que a entrada já não foi cadastrada. Caso já exista, apenas atualize-a com dados suplementares, se os tiver;</li> 
-					<li>Preencha tantos dados quanto puder encontrar, toda informação é valiosa. Os dados mínimos são de data, endereço e fonte da notícia;</li>
-					<li>Os campos com importâncias numéricas, tais como número de vítimas, casas destruídas, etc, cadastre como valores numéricos sempre que possível, em vez de texto corrido;</li>
-					<li>Para preencher a coluna mapa, localize o ponto da ocorrência no Google Maps, centralize-o na tela, clique no botão de geração de link (um clipe) e selecione a URL gerada (com opção URL curta <strong>desativada</strong>). Cole na planilha;</li>
-				</ul>
-			
-				<p>Programadores e designers podem ajudar a desenvolver este app. O código é aberto, essencialmente python e javascript, e está hospedado no <a href="https://github.com/pedromoraes/fogonobarraco">github</a>.</p>
-				
-				<p>Quem puder conseguir dados de fontes oficiais, como bombeiros e defesa civil, por favor entre em contato conosco. Os dados de até 2009 são da defesa civil e são muito mais numerosos do que os já levantados manualmente, de sorte que provavelmente será melhor contar com alguma fonte de dados pública...</p>
-			</div>
-			
-			<div id="materias" class="window">
-				<a href="#" class="close"><font color="#FF0000">[x]</font></a>
-				<h1>Matérias</h1>
-				<br>
-				<h2>Planilha com o levantamento dos incêndios</h2>
-				<a href="https://docs.google.com/spreadsheet/ccc?key=0AmDlUHs6DSRYdEFydXhrUE9wYjFtNlNWN25yQm8ySkE&hl=en_US#gid=0" target="_blank">Planilha pública (Google Docs)</a>
-				<br>
-				<br>
-				<h2>Rolling Stone: Arquitetura da Destruição</h2>
-				<p>Intimidações armadas, desapropriações truculentas e incêndios suspeitos se tornam as ferramentas da desenfreada especulação imobiliária para banir as favelas de São Paulo.</p>
-				<a href="http://www.rollingstone.com.br/edicao/56/arquitetura-da-destruicao" target="_blank">Link para matéria</a>
-				<br>
-				<br>
-				<h2>PET RI PUC-SP: Não acredite em combustão espontânea</h2>
-				<p>De acordo com o Corpo de Bombeiros do Estado de São Paulo, até o dia 3 de setembro de 2012, houve 32 incêndios em favelas do estado – cinco somente nas últimas semanas. O evento não é novo: em quatro anos foram registradas 540 ocorrências. Entretanto, a Comissão Parlamentar de Inquérito (CPI) criada em abril deste ano para investigar os incêndios segue parada, desrespeitando todos os trabalhadores brasileiros que tiveram suas moradias engolidas pelo fogo.</p>
-				<p>Juntamente com o alto número de incêndios, segue-se a suspeita: foram coincidências?</p>
-				<a href="http://petripuc.wordpress.com/2012/09/06/nao-acredite-em-combustao-espontanea/" target="_blank">Link para matéria</a>
-				<br>
-				<br>
-				<h2>Brasil de Fato: Em São Paulo, as áreas valorizadas são as que têm mais incêndios</h2>
-				<p>De acordo com pesquisa, das favelas que foram incendiadas nos últimos meses nove estão localizadas em regiões que o mercado imobiliário aumentou sua valorização: acima de 100%; na contramão, áreas que possuem mais favelas são as menos valorizadas</p>
-				<a href="http://www.brasildefato.com.br/node/10552" target="_blank">Link para matéria</a>
-			</div>
-			
-			<div id="contato" class="window">
-				<a href="#" class="close"><font color="#FF0000">[x]</font></a><br />
-				<h1>Contato</h1>
-				<br>
-				<p>Para nos enviar qualquer pergunta ou sugestão, criamos um e-mail do projeto: <a href="mailto:fogofavela@gmail.com">fogofavela@gmail.com</a></p>
-			</div>
-			
-			<div id="mask"></div>
-		</div>
 		
 		<div id="page">
 			<div id="header">
@@ -88,19 +27,19 @@
 				<header class="jumbotron subhead" id="overview">
 					<ul class="thumbnails">
 						<li class="span4">
-							<h1>Fogo no Barraco</h1>
+							<h1><a href="/" name="window">Fogo no Barraco</a></h1>
 						</li>
 						<li class="span2">
-							<h1><a href="#sobre" name="window">Sobre</a></h1>
+							<h1><a href="static/about.html" name="window">Sobre</a></h1>
 						</li>
 						<li class="span2">
-							<h1><a href="#ajude" name="window">Ajude</a></h1>
+							<h1><a href="static/help.html" name="window">Ajude</a></h1>
 						</li>
 						<li class="span2">
-							<h1><a href="#materias" name="window">Matérias</a></h1>
+							<h1><a href="static/news.html" name="window">Matérias</a></h1>
 						</li>
 						<li class="span2">
-							<h1><a href="#contato" name="window">Contato</a></h1>
+							<h1><a href="static/contact.html" name="window">Contato</a></h1>
 						</li>
 					</ul>
 				</header>
@@ -129,7 +68,13 @@
 			<div id="map_canvas"></div>
 		
 		</div>
+		<br>
+		<br>
+		<br>
+		<br>
 		<hr>
+		<br>
+		<br>
 		
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 		<script>
