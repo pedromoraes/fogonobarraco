@@ -58,6 +58,7 @@ class Command(BaseCommand):
 			o.year = int(year)
 			o.homeless = self.to_num(row['homeless'])
 			o.deaths = self.to_num(row['deaths'])
+			o.injured = self.to_num(row['injured'])
 			o.evidences = row['evidences']
 			o.comments = row['comments']
 			#verificar se já não existe

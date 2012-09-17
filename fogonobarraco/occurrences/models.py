@@ -11,6 +11,7 @@ class Occurrence(models.Model):
 	destroyed = models.IntegerField(null=True)
 	homeless = models.IntegerField(null=True)
 	deaths = models.IntegerField(null=True)
+	injured = models.IntegerField(null=True)
 	evidences = models.TextField(null=True) #TODO: normalize this!
 	comments = models.TextField(null=True)
 

@@ -14,9 +14,9 @@ class SpreadsheetParser():
 		INITIAL_ROW_INDEX = 5
 		
 		cols = {'A':{'TYPE_INDEX':-1, 'DATE_INDEX':0, 'SLUM_NAME_INDEX':1, 'LOCATION_INDEX':2, 'POPULATION_INDEX':3, 'DESTROYED_INDEX':4, 
-				'HOMELESS_INDEX':5, 'DEATHS_INDEX':6, 'EVIDENCES_INDEX':7, 'COMMENTS_INDEX':8, 'MAP_INDEX':9, 'INITIAL_ROW_INDEX':5},
+				'HOMELESS_INDEX':5, 'DEATHS_INDEX':6, 'INJURED_INDEX':7, 'EVIDENCES_INDEX':8, 'COMMENTS_INDEX':9, 'MAP_INDEX':10, 'INITIAL_ROW_INDEX':5},
 				'B':{'TYPE_INDEX':1, 'DATE_INDEX':3, 'SLUM_NAME_INDEX':0, 'LOCATION_INDEX':[5,6], 'POPULATION_INDEX':12, 'DESTROYED_INDEX':10, 
-				'HOMELESS_INDEX':11, 'DEATHS_INDEX':8, 'EVIDENCES_INDEX':13, 'COMMENTS_INDEX':14, 'MAP_INDEX':15, 'INITIAL_ROW_INDEX':5}}
+				'HOMELESS_INDEX':11, 'DEATHS_INDEX':8, 'INJURED_INDEX':7, 'EVIDENCES_INDEX':13, 'COMMENTS_INDEX':14, 'MAP_INDEX':15, 'INITIAL_ROW_INDEX':5}}
 
 		def get_year_data(self, year, user, pwd):
 		
@@ -61,6 +61,7 @@ class SpreadsheetParser():
 					row['destroyed'] = get('DESTROYED_INDEX')
 					row['homeless'] = get('HOMELESS_INDEX')
 					row['deaths'] = get('DEATHS_INDEX')
+					row['injured'] = get('INJURED_INDEX')
 					row['evidences'] = get('EVIDENCES_INDEX')
 					row['comments'] = get('COMMENTS_INDEX')
 					if (ws_type == 'B'):

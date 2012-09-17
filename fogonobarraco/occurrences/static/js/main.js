@@ -156,7 +156,7 @@ var Engine = function() {
 					if (fireInfoWindow) fireInfoWindow.close();
 					var content = '<div><dl><dt><strong>'+item.formatted_date+' - '+item.slum_name+'</strong></dt>',
 						data = [['Endere&ccedil;o', 'location'],['Popula&ccedil;&atilde;o', 'population'],['Moradias destru&iacute;das', 'destroyed'],['Desabrigados', 'homeless'],
-							['V&iacute;timas fatais', 'deaths'], ['Links', 'links'], ['Obs.', 'comments']];
+							['V&iacute;timas fatais', 'deaths'], ['Feridos', 'injured'], ['Links', 'links'], ['Obs.', 'comments']];
 					data.forEach(function(info) {
 						content += '<dt>'+info[0]+':</dt><dd>'+item[info[1]]+'</dd>';
 					});
