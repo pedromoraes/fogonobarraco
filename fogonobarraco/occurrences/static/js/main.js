@@ -16,6 +16,7 @@ function convertPoint(latLng) {
 var Engine = function() {
 	var items, regions, indices, fireMarkers = [], regionsGeometries = [], indicesMarkers = [], fireInfoWindow, regionInfoWindow, sheetID = '', basePath = '/', occurrencesCall = 'occurrences.json', indexedRegionsCall = 'regions.json', regionsCall = 'static/distritos.json',
 		indicesCall = "region/[id]/indices.json", slumsKml, 
+		slumsCall = 'static/favelas.json', slumsGeometries = [],
 		fireMarkerImage = new google.maps.MarkerImage('/static/img/fire-marker/image.png',new google.maps.Size(32,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
 		fireMarkerShadow = new google.maps.MarkerImage('/static/img/fire-marker/shadow.png',new google.maps.Size(76,48),new google.maps.Point(0,0),new google.maps.Point(24,48)),
 		fireMarkerShape = { coord: [10,0,10,1,12,2,14,3,19,4,21,5,22,6,23,7,23,8,24,9,25,10,25,11,25,12,26,13,27,14,27,15,27,16,27,17,27,18,27,19,27,20,27,21,27,22,27,23,27,24,26,25,26,26,25,27,24,28,23,29,21,30,20,31,11,31,10,30,8,29,7,28,6,27,5,26,5,25,4,24,4,23,4,22,4,21,4,20,4,19,4,18,4,17,5,16,5,15,5,14,5,13,5,12,5,11,6,10,7,9,8,8,11,7,11,6,10,5,9,4,9,3,9,2,8,1,8,0,10,0], type: 'poly' },
@@ -26,7 +27,7 @@ var Engine = function() {
 		showTooltip = function(name, x, y) {
 			if (tooltip) hideTooltip();
 			tooltip = $('<div id="tooltip"></div>');
-			tooltip.text(name);
+			tooltip.html(name);
 			$('#map_canvas').prepend(tooltip);
 			x -= tooltip.width()/2;
 			y -= tooltip.height()/2 + 5;
@@ -44,9 +45,11 @@ var Engine = function() {
 			this.loadOcurrences();
 			this.loadIndices();
 			this.loadRegions();
+			this.loadSlums();
 			$("section#filters ul#years input").change(this.filterFireMarkers.bind(this));
 			$("section#filters ul#overlays input[name=\"cb_indices\"]").change(this.toggleIndicesMarkers.bind(this));
 			$("section#filters ul#overlays input[name=\"cb_regions\"]").change(this.toggleRegionsLayer.bind(this));
+			$("section#filters ul#overlays input[name=\"cb_slums\"]").change(this.toggleSlumsLayer.bind(this));
 			return this;
 		},
 		loadOcurrences: function() {
@@ -85,6 +88,7 @@ var Engine = function() {
 				regions = data;
 				regions.forEach(function(item) {
 					var coords = $(item.geometria).text().split(' ');
+					//trace(coords);
 					var points = [];
 					var bounds = new google.maps.LatLngBounds();
 					coords.forEach(function(cs) {
@@ -112,14 +116,63 @@ var Engine = function() {
 						if (evt.b.toElement != tooltip.get(0)) hideTooltip();
 					});
 					//poly.setMap(map);
+					//trace(poly);
+					//trace(bounds);
 					regionsGeometries.push(poly);
 				});
+			}.bind(this)).error(trace);
+		},
+		loadSlums: function() {
+			$.getJSON(slumsCall, function(data) {
+				slums = data;
+				var n = 0;
+				slums.poly.forEach(function(item){
+					var coords = item.coordenadas.split(' ');
+					//trace(coords);
+					var points = [];
+					var bounds = new google.maps.LatLngBounds();
+					coords.forEach(function(cs) {
+						var parts = cs.split(','), latlng = new google.maps.LatLng(parts[1], parts[0]);
+						points.push(latlng);
+						bounds.extend(latlng);
+					});
+					var poly = new google.maps.Polygon({
+						paths: points,
+						strokeWeight: 1,
+						strokeColor: '#A52A2A',
+						strokeOpacity: 0.5,
+						fillColor: '#A52A2A',
+						fillOpacity: 0.5,
+						cursor: 'default'
+					});
+					poly.bounds = bounds;
+					
+					//trace(item.favela);
+					//trace(slums.favela[item.favela]);		
+					
+					google.maps.event.addListener(poly, 'mouseover', function() {
+						this.setOptions({fillOpacity: 0.7, strokeColor: '#A52A2A'});
+						var center = convertPoint(this.bounds.getCenter()), x = center.x, y = center.y;
+						showTooltip('<strong>' + slums.favela[item.favela].nome.toUpperCase() + '</strong>' + "<br/>Pop. " + slums.favela[item.favela].populacao, x, y);
+					});
+					google.maps.event.addListener(poly, 'mouseout', function(evt) {
+						this.setOptions({fillOpacity: 0.5, strokeColor: '#A52A2A'});
+						if (evt.b.toElement != tooltip.get(0)) hideTooltip();
+					});					
+					//trace(bounds);
+					slumsGeometries.push(poly);
+					n++;
+				})
 			}.bind(this)).error(trace);
 		},
 		toggleRegionsLayer: function() {
 			var active = $("section#filters ul#overlays input[name=\"cb_regions\"]").attr('checked') ? true : false;
 			regionsGeometries.forEach(function(el) { el.setMap(active?map:null); });
 		},
+		toggleSlumsLayer: function() {
+			var active = $("section#filters ul#overlays input[name=\"cb_slums\"]").attr('checked') ? true : false;
+			slumsGeometries.forEach(function(el) { el.setMap(active?map:null); });
+		},		
 		toggleIndicesMarkers: function() {
 			var active = $("section#filters ul#overlays input[name=\"cb_indices\"]").attr('checked') ? true : false;
 			indicesMarkers.forEach(function(el) { el.setMap(active?map:null); });
