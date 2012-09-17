@@ -29,8 +29,8 @@ var Engine = function() {
 			tooltip = $('<div id="tooltip"></div>');
 			tooltip.html(name);
 			$('#map_canvas').prepend(tooltip);
-			x -= tooltip.width()/2;
-			y -= tooltip.height()/2 + 5;
+			x -= tooltip.width() / 2;
+			y -= tooltip.height() / 2 + 50;
 			tooltip.css({marginLeft:x,marginTop:y});
 		},
 		hideTooltip = function() {
