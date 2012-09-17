@@ -125,7 +125,6 @@ var Engine = function() {
 		loadSlums: function() {
 			$.getJSON(slumsCall, function(data) {
 				slums = data;
-				var n = 0;
 				slums.poly.forEach(function(item){
 					var coords = item.coordenadas.split(' ');
 					//trace(coords);
@@ -161,7 +160,6 @@ var Engine = function() {
 					});					
 					//trace(bounds);
 					slumsGeometries.push(poly);
-					n++;
 				})
 			}.bind(this)).error(trace);
 		},
