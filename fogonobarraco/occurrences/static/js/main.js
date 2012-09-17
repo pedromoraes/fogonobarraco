@@ -99,9 +99,9 @@ var Engine = function() {
 					var poly = new google.maps.Polygon({
 						paths: points,
 						strokeWeight: 1,
-						strokeColor: '#f00',
+						strokeColor: '#00f',
 						strokeOpacity: 0.5,
-						fillColor: '#f00',
+						fillColor: '#00f',
 						fillOpacity: 0.05,
 						cursor: 'default'
 					});
@@ -112,12 +112,9 @@ var Engine = function() {
 						showTooltip(item.distrito, x, y);
 					});
 					google.maps.event.addListener(poly, 'mouseout', function(evt) {
-						this.setOptions({fillOpacity: 0.05, strokeColor: '#f00'});
+						this.setOptions({fillOpacity: 0.05, strokeColor: '#00f'});
 						if (evt.b.toElement != tooltip.get(0)) hideTooltip();
 					});
-					//poly.setMap(map);
-					//trace(poly);
-					//trace(bounds);
 					regionsGeometries.push(poly);
 				});
 			}.bind(this)).error(trace);
@@ -127,7 +124,6 @@ var Engine = function() {
 				slums = data;
 				slums.poly.forEach(function(item){
 					var coords = item.coordenadas.split(' ');
-					//trace(coords);
 					var points = [];
 					var bounds = new google.maps.LatLngBounds();
 					coords.forEach(function(cs) {
@@ -146,9 +142,6 @@ var Engine = function() {
 					});
 					poly.bounds = bounds;
 					
-					//trace(item.favela);
-					//trace(slums.favela[item.favela]);		
-					
 					google.maps.event.addListener(poly, 'mouseover', function() {
 						this.setOptions({fillOpacity: 0.7, strokeColor: '#A52A2A'});
 						var center = convertPoint(this.bounds.getCenter()), x = center.x, y = center.y;
@@ -158,7 +151,6 @@ var Engine = function() {
 						this.setOptions({fillOpacity: 0.5, strokeColor: '#A52A2A'});
 						if (evt.b.toElement != tooltip.get(0)) hideTooltip();
 					});					
-					//trace(bounds);
 					slumsGeometries.push(poly);
 				})
 			}.bind(this)).error(trace);
