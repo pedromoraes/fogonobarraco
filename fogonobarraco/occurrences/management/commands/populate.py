@@ -5,7 +5,8 @@ from _spreadsheet_parser import *
 from occurrences.models import *
 import datetime
 import exceptions
-
+import pickle
+import md5
 
 class Command(BaseCommand):
 	args = '<year>'
@@ -41,9 +42,10 @@ class Command(BaseCommand):
 		sheet = SpreadsheetParser()
 		rows = sheet.get_year_data(year, self.user, self.pwd)    
 			
-		Occurrence.objects.filter(year=int(year)).delete()
+		#Occurrence.objects.filter(year=int(year)).delete()
 		
 		for row in rows:
+			#verificar se já não existe
 			o = Occurrence()	
 			o.slum_name = row['slum_name']
 			try:
@@ -61,5 +63,13 @@ class Command(BaseCommand):
 			o.injured = self.to_num(row['injured'])
 			o.evidences = row['evidences']
 			o.comments = row['comments']
-			#verificar se já não existe
-			o.save() 
+			o.status = 'N'	
+			
+			signature = md5.new(pickle.dumps(o)).hexdigest()
+			o.signature = signature
+		
+			try:
+				Occurrence.objects.get(signature=o.signature)
+			except Occurrence.DoesNotExist:
+				o.save()
+				print 'NEW OCCURRENCE: ' + o.location + '\n'

@@ -14,6 +14,6 @@ def get(request):
 	#return HttpResponse(serializers.serialize('json', Occurrence.objects.all()),'application/json')
 	all = []
 	fields = "slum_name", "location", "formatted_date", "latitude", "longitude", "population", "destroyed", "homeless", "deaths", "injured", "evidences", "comments", "year" 
-	for occ in Occurrence.objects.all():
+	for occ in Occurrence.objects.filter(status='P'):
 		all.append(dict([(attr, getattr(occ, attr)) for attr in fields]))
 	return HttpResponse(simplejson.dumps({"success": True, "occurrences": all}),'application/json')

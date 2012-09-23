@@ -37,12 +37,12 @@ class SpreadsheetParser():
 				print ws_type, row_count
 				cols = self.cols[ws_type]
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
-					print "\n\n\n NEW ROW:"
+					#print "\n\n\n NEW ROW:"
 					row_values = worksheet.row_values(i)
 					def get(x):
 						try: return row_values[cols[x]] or ''
 						except Exception: return ''
-					print get('TYPE_INDEX')
+					#print get('TYPE_INDEX')
 					if (ws_type == 'B' and get('TYPE_INDEX').lower() != 'favela'): continue
 					row = {}
 					row['date'] = get('DATE_INDEX')
@@ -68,20 +68,18 @@ class SpreadsheetParser():
 						if row['comments'] == None: row['comments']  = 'Fonte: Defesa civil'
 						else: row['comments'] = str(row['comments']) + ' Fonte: Defesa Civil'
 
-					print row
+					#print row
 
 					sp = Point(-23.548999,-46.63854)
 					coords = ''
 					mapurl = get('MAP_INDEX')
 					if (mapurl):
-						print 'mapurl', mapurl
 						p = re.compile('(?<=ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
 						coords = p.findall(mapurl)
 						if len(coords) == 0:
 							p = re.compile('(?<=q=)-?\d+.?\d+,?-?\d+.?\d+')
 							coords = p.findall(mapurl)
 					elif (row['location']):
-						print 'geocode'
 						try:
 							g = geocoders.Google()
 							for place, (lat, lng) in g.geocode(unidecode(row['location']) + ", Sao Paulo, Brazil", exactly_one=False):
@@ -97,7 +95,7 @@ class SpreadsheetParser():
 					if (len(coords) and len(coords[0].split(",")) == 2):
 						row['latitude'] = coords[0].split(",")[0]
 						row['longitude'] = coords[0].split(",")[1]
-						print ('saving', row['location'], coords)
+						#print ('saving', row['location'], coords)
 						rows.append(row)
 				return rows
 
