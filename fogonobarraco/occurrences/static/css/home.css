@@ -1,41 +1,33 @@
-html, body, #map_canvas {
-	margin: 0;
-	padding: 0;
+html, body{
+	margin: 0px;
+	height:100%;
+	background-image: url("/static/img/seattlebg.png");
+	background-repeat: repeat;
+}
+
+#page{
+	margin-top: 5px;
+	width:100%;
+	height:100%;
+}
+
+#sidemenu{
+	float:right;
+}
+
+#map_canvas{
 	height: 100%;
 }
 
-body {
-	font-family: 'Source Sans Pro', sans-serif;
+#overview a:link, #overview a:visited{
+	color: #666666;
 }
 
-h1 {
-	padding: 0 0 5px 0;
-	font-size: 16px;
+#overview a:hover, #overview a:active{
+	color: #000000;
+	text-decoration: none;
 }
-h2 {
-	padding: 0 0 10px 0;
-	font-size: 11px;
-	font-weight: normal;
-}
-
-section {
-	padding: 0 0 0 20px;
-}
-
-section#filters {
-	width: 200px;
-	height: 100%;
-	float: left;
-	padding: 20px;
-}
-
-li input[type="checkbox"] {
-	margin: 0 6px 0 0;
-}
-
-section#map {
-	
-}
+<<<<<<< HEAD
 
 dl#links {
 	font-size: 10px;
@@ -57,3 +49,5 @@ section#filters ul, section#filters li {
 	font-size: 11px;
 	cursor: default;
 }
+=======
+>>>>>>> f536737b0737e770a25ef6dfdb9f77225a81108b
