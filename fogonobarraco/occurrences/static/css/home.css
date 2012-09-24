@@ -65,3 +65,10 @@ section#filters ul {
 	font-size: 11px;
 	cursor: default;
 }
+
+body > .container{margin-top:68px;}@media(min-width: 980px){body > .container{margin-top:58px;}}
+nav#access { height: 41px; }
+
+nav#access  .container, nav#access .navbar-static-top .container, nav#access .navbar-fixed-top .container, nav#access .navbar-fixed-bottom .container {
+width: 1170px;
+}
