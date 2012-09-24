@@ -85,8 +85,7 @@ class SpreadsheetParser():
 						if len(coords) == 0 or not in_range(Point(*coords[0].split(","))):
 							p = re.compile('(?<=q=)-?\d+.?\d+,?-?\d+.?\d+')
 							coords = p.findall(mapurl)
-							lat, lng = coords[0].split(",")
-							if not in_range(Point(lat,lng)): coords = ''
+							if not in_range(Point(*coords[0].split(","))): coords = ''
 					elif (row['location']):
 						try:
 							g = geocoders.Google()
