@@ -23,10 +23,14 @@ section {
 }
 
 section#filters {
-	width: 200px;
+	width: 250px;
 	height: 100%;
 	float: left;
 	padding: 20px;
+}
+
+section#filters ul#overlays, section#filters dl {
+	display: none;
 }
 
 li input[type="checkbox"] {
@@ -46,6 +50,10 @@ section#filters ul, section#filters li {
 	text-indent: 0;
 	padding: 0;
 	margin: 0;
+}
+
+section#filters ul {
+        padding-top: 8px;
 }
 
 #tooltip {
