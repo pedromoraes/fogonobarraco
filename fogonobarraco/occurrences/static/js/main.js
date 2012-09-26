@@ -50,6 +50,13 @@ var Engine = function() {
 			$("section#filters ul#overlays input[name=\"cb_indices\"]").change(this.toggleIndicesMarkers.bind(this));
 			$("section#filters ul#overlays input[name=\"cb_regions\"]").change(this.toggleRegionsLayer.bind(this));
 			$("section#filters ul#overlays input[name=\"cb_slums\"]").change(this.toggleSlumsLayer.bind(this));
+			$("section#filters ul.nav > li").click(function() {
+				var node = $(this).data("list");
+				$("section#filters .nav-content").hide();
+				$("section#filters #" + node).show();
+				$("section#filters ul.nav > li").removeClass("active");
+				$(this).addClass("active");
+			});
 			return this;
 		},
 		loadOcurrences: function() {

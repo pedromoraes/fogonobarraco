@@ -23,10 +23,14 @@ section {
 }
 
 section#filters {
-	width: 200px;
+	width: 250px;
 	height: 100%;
 	float: left;
 	padding: 20px;
+}
+
+section#filters ul#overlays, section#filters dl {
+	display: none;
 }
 
 li input[type="checkbox"] {
@@ -48,6 +52,10 @@ section#filters ul, section#filters li {
 	margin: 0;
 }
 
+section#filters ul {
+        padding-top: 8px;
+}
+
 #tooltip {
 	padding: 4px; 
 	background: white;
@@ -56,4 +64,11 @@ section#filters ul, section#filters li {
 	z-index: 10000;
 	font-size: 11px;
 	cursor: default;
+}
+
+body > .container{margin-top:68px;}@media(min-width: 980px){body > .container{margin-top:58px;}}
+nav#access { height: 41px; }
+
+nav#access  .container, nav#access .navbar-static-top .container, nav#access .navbar-fixed-top .container, nav#access .navbar-fixed-bottom .container {
+width: 1170px;
 }

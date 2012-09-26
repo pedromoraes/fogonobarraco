@@ -54,7 +54,7 @@ class SpreadsheetParser():
 					if (isinstance(l, (list, tuple))):
 						locationcols = []
 						for lc in l: locationcols.append(worksheet.cell(i, lc+1).value or '')
-						row['location'] = ','.join(locationcols)
+						row['location'] = 'rua ' + ','.join(locationcols)
 					else:
 						row['location'] = get('LOCATION_INDEX')
 					row['population'] = get('POPULATION_INDEX')
@@ -73,20 +73,25 @@ class SpreadsheetParser():
 					sp = Point(-23.548999,-46.63854)
 					coords = ''
 					mapurl = get('MAP_INDEX')
+					
+					def in_range(p):
+						d = distance.distance(p, sp)
+						print d
+						return (d > 0.1 and d < 50)
+					
 					if (mapurl):
 						p = re.compile('(?<=ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
-						coords = p.findall(mapurl)
-						if len(coords) == 0:
+						coords = p.findall(mapurl)					
+						if len(coords) == 0 or not in_range(Point(*coords[0].split(","))):
 							p = re.compile('(?<=q=)-?\d+.?\d+,?-?\d+.?\d+')
 							coords = p.findall(mapurl)
+							if len(coords) == 0 or not in_range(Point(*coords[0].split(","))): coords = ''
 					elif (row['location']):
 						try:
 							g = geocoders.Google()
 							for place, (lat, lng) in g.geocode(unidecode(row['location']) + ", Sao Paulo, Brazil", exactly_one=False):
 								p = Point(lat, lng)
-								d = distance.distance(p, sp)
-								print d
-								if (d > 0.1 and d < 50):
+								if (in_range(p)):
 									coords = [str(lat)+','+str(lng)]
 									break
 						except Exception:
