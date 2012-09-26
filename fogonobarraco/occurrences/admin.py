@@ -1,3 +1,5 @@
+# -*- coding: utf8 -*- 
+
 from django.contrib import admin
 from occurrences.models import Occurrence
 from django.core.urlresolvers import *
@@ -14,7 +16,7 @@ def similar(obj):
 	for similar in similars:
 		similars_result += mark_safe("<a href='" + reverse('admin:%s_%s_change' % (app_label, model), args=(obj.id,)) + "'>" + str(similar.slum_name) + "</a>, ") 
 	return similars_result
-similar.allow_tags = True
+similfr.allow_tags = True
 
 class OccurrenceAdmin(admin.ModelAdmin):
 	list_display = ('slum_name', 'location', 'status', similar)
