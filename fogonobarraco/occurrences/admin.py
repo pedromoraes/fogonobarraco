@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 from django.contrib import admin
 from occurrences.models import Occurrence
 from django.core.urlresolvers import *
