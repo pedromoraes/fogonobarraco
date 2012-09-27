@@ -18,7 +18,7 @@ def similar(obj):
 	model = obj._meta.module_name
 	
 	for similar in similars:
-		similars_result += mark_safe("<a href='" + reverse('admin:%s_%s_change' % (app_label, model), args=(obj.id,)) + "'>" + str(similar.slum_name) + "</a>, ") 
+		similars_result += mark_safe("<a href='" + reverse('admin:%s_%s_change' % (app_label, model), args=(obj.id,)) + "'>" + str(similar.slum_name) + " " + str(similar.location)  + "</a>, ") 
 	return similars_result
 similar.allow_tags = True
 
