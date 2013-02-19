@@ -43,7 +43,6 @@ class Command(BaseCommand):
 		rows = sheet.get_year_data(year, self.user, self.pwd)    
 			
 		#Occurrence.objects.filter(year=int(year)).delete()
-		
 		for row in rows:
 			#verificar se já não existe
 			o = Occurrence()	

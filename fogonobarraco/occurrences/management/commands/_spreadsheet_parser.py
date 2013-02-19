@@ -11,10 +11,8 @@ class SpreadsheetParser():
 
 		#indexes
 		
-		INITIAL_ROW_INDEX = 5
-		
 		cols = {'A':{'TYPE_INDEX':-1, 'DATE_INDEX':0, 'SLUM_NAME_INDEX':1, 'LOCATION_INDEX':2, 'POPULATION_INDEX':3, 'DESTROYED_INDEX':4, 
-				'HOMELESS_INDEX':5, 'DEATHS_INDEX':6, 'INJURED_INDEX':7, 'EVIDENCES_INDEX':8, 'COMMENTS_INDEX':9, 'MAP_INDEX':10, 'INITIAL_ROW_INDEX':5},
+				'HOMELESS_INDEX':5, 'DEATHS_INDEX':6, 'INJURED_INDEX':7, 'EVIDENCES_INDEX':8, 'COMMENTS_INDEX':9, 'MAP_INDEX':10, 'INITIAL_ROW_INDEX':3},
 				'B':{'TYPE_INDEX':1, 'DATE_INDEX':3, 'SLUM_NAME_INDEX':0, 'LOCATION_INDEX':[5,6], 'POPULATION_INDEX':12, 'DESTROYED_INDEX':10, 
 				'HOMELESS_INDEX':11, 'DEATHS_INDEX':8, 'INJURED_INDEX':7, 'EVIDENCES_INDEX':13, 'COMMENTS_INDEX':14, 'MAP_INDEX':15, 'INITIAL_ROW_INDEX':5}}
 
@@ -28,7 +26,6 @@ class SpreadsheetParser():
 				row_count = len(worksheet.col_values(2))
 
 				rows = []
-				print len(worksheet.row_values(0))
 				if(worksheet.cell(3, 1).value == 'Dados fornecidos pela Defesa Civil ; DC_ = campo dos dados fornecidos pela Defesa Civil'):
 					ws_type = 'B'
 				else:
@@ -36,6 +33,8 @@ class SpreadsheetParser():
 					
 				print ws_type, row_count
 				cols = self.cols[ws_type]
+
+				print cols['INITIAL_ROW_INDEX']
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
 					#print "\n\n\n NEW ROW:"
 					row_values = worksheet.row_values(i)
@@ -57,6 +56,7 @@ class SpreadsheetParser():
 						row['location'] = 'rua ' + ','.join(locationcols)
 					else:
 						row['location'] = get('LOCATION_INDEX')
+						
 					row['population'] = get('POPULATION_INDEX')
 					row['destroyed'] = get('DESTROYED_INDEX')
 					row['homeless'] = get('HOMELESS_INDEX')
@@ -79,6 +79,7 @@ class SpreadsheetParser():
 						print d
 						return (d > 0.1 and d < 50)
 					
+					
 					if (mapurl):
 						p = re.compile('(?<=ll=)-?\d+.?\d+,?-?\d+.?\d+') #TODO: melhorar essa caca pra retornar uma lista de 2 objetos e eliminar esses splits abaixo
 						coords = p.findall(mapurl)					
@@ -96,12 +97,14 @@ class SpreadsheetParser():
 									break
 						except Exception:
 							print 'GQueryError'
-							
+					
+					
 					if (len(coords) and len(coords[0].split(",")) == 2):
 						row['latitude'] = coords[0].split(",")[0]
 						row['longitude'] = coords[0].split(",")[1]
 						#print ('saving', row['location'], coords)
 						rows.append(row)
+						
 				return rows
 
 			
