@@ -277,7 +277,7 @@ var Engine = function() {
 			$("section#filters ul#overlays input:checked").each(function() {
 				url += $(this).val() + ",";
 			});
-			return location.protocol + '/' + location.host + '/#load/' + encodeURIComponent(url);
+			return location.protocol + '//' + location.host + '/#load/' + encodeURIComponent(url);
 		},
 		loadSettings: function() {
 			var hash = decodeURIComponent(location.hash.split('load/').pop());
