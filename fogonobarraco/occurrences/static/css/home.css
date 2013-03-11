@@ -66,6 +66,17 @@ section#filters ul {
 	cursor: default;
 }
 
+button#get_link {
+	position: fixed;
+	bottom: 10px; right: 10px;
+	z-index: 100;
+}
+
+input#share_url {
+	font-size: 10px; 
+	width: 97%;
+}
+
 body > .container{margin-top:68px;}@media(min-width: 980px){body > .container{margin-top:58px;}}
 nav#access { height: 41px; }
 

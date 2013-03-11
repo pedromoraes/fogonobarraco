@@ -79,6 +79,22 @@
 				<dd>Em São Paulo, as áreas valorizadas são as que têm mais incêndios</dd>
 			</dl>
 		</section>
+		
+		<div id="share_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="share_modal" aria-hidden="true">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 id="share_modal_label">Compartilhar essa visão do mapa</h3>
+		  </div>
+		  <div class="modal-body">
+		    <p>Essa URL carregará o mapa com as configurações atuais de posicionamento e camadas:</p>
+		    <input id="share_url" type='text' />
+		  </div>
+		  <div class="modal-footer">
+		    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		  </div>
+		</div>
+
+		<button id="get_link">URL <img src="static/img/paperclip.png" /></button>
 
 		<div id="map_canvas"></div>
 

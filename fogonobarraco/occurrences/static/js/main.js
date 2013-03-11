@@ -59,6 +59,19 @@ var Engine = function() {
 				$("section#filters ul.nav > li").removeClass("active");
 				$(this).addClass("active");
 			});
+			$("#share_url").click(function() {
+				this.setSelectionRange(0,9999);
+			})
+			$("button#get_link").click(function() {
+				$("#share_url").val(this.getShareUrl());
+				$("#share_modal").modal();
+			}.bind(this));
+			
+			if (location.hash.length > 2) {
+				setTimeout(function() {
+					this.loadSettings();
+				}.bind(this), 666);
+			}
 			return this;
 		},
 		loadOcurrences: function() {
@@ -131,7 +144,7 @@ var Engine = function() {
 					});
 					google.maps.event.addListener(poly, 'mouseout', function(evt) {
 						this.setOptions({fillOpacity: 0.05, strokeColor: '#00f'});
-						if (evt.b.toElement != tooltip.get(0)) hideTooltip();
+						if (evt && evt.b && evt.b.toElement != tooltip.get(0)) hideTooltip();
 					});
 					regionsGeometries.push(poly);
 				});
@@ -253,6 +266,50 @@ var Engine = function() {
 				marker.setMap(map);
 				indicesMarkers.push(marker);
 			});
+		},
+		getShareUrl: function() {
+			var url = "";
+			url += map.getCenter().toString() + map.getZoom() + "|";
+			$("section#filters ul#years input:checked").each(function() {
+				url += $(this).val() + ",";
+			}); 
+			url += "|";
+			$("section#filters ul#overlays input:checked").each(function() {
+				url += $(this).val() + ",";
+			});
+			return location.protocol + '/' + location.host + '/#load/' + encodeURIComponent(url);
+		},
+		loadSettings: function() {
+			var hash = decodeURIComponent(location.hash.split('load/').pop());
+			var pos = hash.split(')').shift().split('(').pop();
+			hash = hash.split(')').pop();
+			var lat = pos.split(",").shift(), lng = pos.split(", ").pop();
+			map.setCenter(new google.maps.LatLng(lat, lng));
+			var parts = hash.split("|");
+			var zoom = parts.shift();
+			map.setZoom(parseFloat(zoom));
+			var years = parts.shift().split(',');
+			$("section#filters ul#years input").attr('checked', false);
+			$.each(years, function(ix, value) {
+				if (value) {
+					$("section#filters ul#years input[value="+value+"]").attr('checked', true);
+				}
+			});
+			this.filterFireMarkers();
+			var overlays = parts.shift().split(',');
+			$("section#filters ul#overlays input").attr('checked', false);
+			$.each(overlays, function(ix, value) {
+				if (value) {
+					$("section#filters ul#overlays input[value="+value+"]").attr('checked', true);
+				}
+			});
+			setTimeout(function() {
+				this.toggleIndicesMarkers();
+				this.toggleSlumsLayer();
+				this.toggleRemovalsLayer();
+				this.toggleRegionsLayer();
+			}.bind(this), 999);
+			location.hash = '';
 		}
 	}.init();
 }
