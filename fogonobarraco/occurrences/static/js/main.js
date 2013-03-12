@@ -203,7 +203,7 @@ var Engine = function() {
 			} else {
 				var active = $("section#filters ul#years input[name=\"cb_heatmap\"]").attr('checked') ? true : false;
 				heatmapLayer.setMap(active?map:null);
-				fireMarkers.forEach(function(el) {el.setMap(active?null:map);});
+				this.filterFireMarkers();
 			}
 		},
 		toggleRegionsLayer: function() {
@@ -227,10 +227,11 @@ var Engine = function() {
 		},
 		filterFireMarkers: function() {
 			heatmapData = [];
+			var heatmap = $("section#filters ul#years input[name=\"cb_heatmap\"]").attr('checked') ? true : false;
 			fireMarkers.forEach(function(el) {
 				if (el && el.data) {
 					var active = $("section#filters ul#years input[value=\""+el.data.year+"\"]").attr('checked') ? true : false;
-					el.setMap(active?map:null);
+					el.setMap(active&&!heatmap?map:null);
 					if (active) {
 						heatmapData.push(new google.maps.LatLng(el.data.latitude, el.data.longitude));
 					}
