@@ -14,8 +14,10 @@ function convertPoint(latLng) {
 } 
 
 var Engine = function() {
-	var items, regions, indices, fireMarkers = [], regionsGeometries = [], indicesMarkers = [], fireInfoWindow, regionInfoWindow, sheetID = '', basePath = '/', occurrencesCall = 'occurrences.json', indexedRegionsCall = 'regions.json', regionsCall = 'static/distritos.json',
-		indicesCall = "region/[id]/indices.json", slumsKml, 
+	var items, regions, indices, fireMarkers = [], regionsGeometries = [], indicesMarkers = [], fireInfoWindow, regionInfoWindow, sheetID = '',
+		basePath = '/',
+		occurrencesCall = 'occurrences.json', indexedRegionsCall = 'regions.json', regionsCall = 'static/distritos.json',
+		indicesCall = "region/[id]/indices.json", slumsKml,
 		slumsCall = 'static/favelas.json', slumsGeometries = [],
 		removalsCall = 'http://ft2json.appspot.com/q?sql=select%20*%20from%201fYN81KOnvjCVFBvWuHs6ULkd1odYzASA4NH2dSE&limit=9999', removalsLayer = null,
 		fireMarkerImage = new google.maps.MarkerImage('/static/img/fire-marker/image.png',new google.maps.Size(32,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
@@ -25,6 +27,7 @@ var Engine = function() {
 		chartMarkerShadow = new google.maps.MarkerImage('/static/img/chart-marker/shadow.png',new google.maps.Size(52,32),new google.maps.Point(0,0),new google.maps.Point(16,32)),
 		chartMarkerShape = { coord: [26,0,27,1,27,2,27,3,27,4,27,5,27,6,27,7,27,8,27,9,27,10,27,11,27,12,27,13,27,14,27,15,27,16,27,17,27,18,27,19,27,20,27,21,27,22,27,23,27,24,27,25,27,26,27,27,27,28,24,29,23,30,21,31,19,31,15,30,12,29,8,28,5,27,2,26,3,25,3,24,3,23,3,22,4,21,5,20,5,19,5,18,5,17,5,16,5,15,5,14,5,13,5,12,5,11,5,10,5,9,5,8,5,7,5,6,5,5,5,4,5,3,5,2,5,1,5,0,26,0], type: 'poly' },
 		tooltip, 
+		heatmapData, heatmapLayer,
 		showTooltip = function(name, x, y) {
 			if (tooltip) hideTooltip();
 			tooltip = $('<div id="tooltip"></div>');
@@ -52,6 +55,7 @@ var Engine = function() {
 			$("section#filters ul#overlays input[name=\"cb_regions\"]").change(this.toggleRegionsLayer.bind(this));
 			$("section#filters ul#overlays input[name=\"cb_slums\"]").change(this.toggleSlumsLayer.bind(this));
 			$("section#filters ul#overlays input[name=\"cb_removals\"]").change(this.toggleRemovalsLayer.bind(this));
+			$("section#filters ul#years input[name=\"cb_heatmap\"]").change(this.toggleHeatmap.bind(this));
 			$("section#filters ul.nav > li").click(function() {
 				var node = $(this).data("list");
 				$("section#filters .nav-content").hide();
@@ -77,6 +81,7 @@ var Engine = function() {
 		loadOcurrences: function() {
 			$.getJSON(basePath+occurrencesCall, function(data) {
 				if (data.success) {
+					heatmapData = [];
 					items = data.occurrences.map(function(item) {
 						for (var s in item) {
 							switch (item[s]) {
@@ -89,6 +94,10 @@ var Engine = function() {
 						}
 						return item;
 					}); 
+					$.each(items, function(ix, item) {
+						heatmapData.push(new google.maps.LatLng(item.latitude, item.longitude));
+					});
+					//this.toggleHeatmap();
 					this.createFireMarkers();
 				} else {
 					trace('error loading data', data);
@@ -186,6 +195,17 @@ var Engine = function() {
 				})
 			}.bind(this)).error(trace);
 		},
+		toggleHeatmap: function() {
+			if (!heatmapLayer) {
+				heatmapLayer = new google.maps.visualization.HeatmapLayer({ data: heatmapData, radius: 40, gradient: ['transparent', '#fff000', '#ff0000'] });
+				heatmapLayer.setMap(map);
+				fireMarkers.forEach(function(el) {el.setMap(null);});
+			} else {
+				var active = $("section#filters ul#years input[name=\"cb_heatmap\"]").attr('checked') ? true : false;
+				heatmapLayer.setMap(active?map:null);
+				fireMarkers.forEach(function(el) {el.setMap(active?null:map);});
+			}
+		},
 		toggleRegionsLayer: function() {
 			var active = $("section#filters ul#overlays input[name=\"cb_regions\"]").attr('checked') ? true : false;
 			regionsGeometries.forEach(function(el) { el.setMap(active?map:null); });
@@ -206,12 +226,17 @@ var Engine = function() {
 			indicesMarkers.forEach(function(el) { el.setMap(active?map:null); });
 		},
 		filterFireMarkers: function() {
+			heatmapData = [];
 			fireMarkers.forEach(function(el) {
 				if (el && el.data) {
 					var active = $("section#filters ul#years input[value=\""+el.data.year+"\"]").attr('checked') ? true : false;
 					el.setMap(active?map:null);
+					if (active) {
+						heatmapData.push(new google.maps.LatLng(el.data.latitude, el.data.longitude));
+					}
 				}
 			});
+			if (heatmapLayer) heatmapLayer.setData(heatmapData);
 		},
 		removeFireMarkers: function() {
 			fireMarkers.forEach(function(el) {
