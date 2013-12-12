@@ -334,6 +334,7 @@ var Engine = function() {
 				this.toggleSlumsLayer();
 				this.toggleRemovalsLayer();
 				this.toggleRegionsLayer();
+				this.filterFireMarkers();
 			}.bind(this), 999);
 			location.hash = '';
 		}
