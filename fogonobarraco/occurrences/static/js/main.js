@@ -104,13 +104,13 @@ var Engine = function() {
 				}
 			}.bind(this)).error(trace);
 		},
-		loadRemovals: function() {
+		loadRemovals: function(active) {
 			removalsLayer = new google.maps.FusionTablesLayer({
 		        query: {
 		          select: "'Coordenadas'",
 		          from: '1dmsZZ3fR3m4_FPa4V_iUqUOxhFcuGNEuIn7z5Jo'
 		        },
-		        map: map
+		        map: active?map:null
 		      });
 		},
 		loadIndices: function() {
@@ -215,11 +215,9 @@ var Engine = function() {
 			slumsGeometries.forEach(function(el) { el.setMap(active?map:null); });
 		},
 		toggleRemovalsLayer: function() {
-			if (!removalsLayer) this.loadRemovals();
-			else {
-				var active = $("section#filters ul#overlays input[name=\"cb_removals\"]").attr('checked') ? true : false;
-				removalsLayer.setMap(active?map:null);
-			}
+			var active = $("section#filters ul#overlays input[name=\"cb_removals\"]").attr('checked') ? true : false;
+			if (!removalsLayer) this.loadRemovals(active);
+			removalsLayer.setMap(active?map:null);
 		},
 		toggleIndicesMarkers: function() {
 			var active = $("section#filters ul#overlays input[name=\"cb_indices\"]").attr('checked') ? true : false;
