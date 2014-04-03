@@ -41,7 +41,7 @@ class Command(BaseCommand):
 
 		sheet = SpreadsheetParser()
 		rows = sheet.get_year_data(year, self.user, self.pwd)    
-			
+		print rows
 		#Occurrence.objects.filter(year=int(year)).delete()
 		for row in rows:
 			#verificar se já não existe

@@ -38,13 +38,16 @@ class SpreadsheetParser():
 				for i in range(cols['INITIAL_ROW_INDEX'], row_count+1):
 					#print "\n\n\n NEW ROW:"
 					row_values = worksheet.row_values(i)
+
 					def get(x):
 						try: return row_values[cols[x]] or ''
 						except Exception: return ''
 					#print get('TYPE_INDEX')
+					
 					if (ws_type == 'B' and get('TYPE_INDEX').lower() != 'favela'): continue
 					row = {}
 					row['date'] = get('DATE_INDEX')
+					
 					if (row['date'] == None): continue
 					
 					row['slum_name'] = get('SLUM_NAME_INDEX')
@@ -74,6 +77,7 @@ class SpreadsheetParser():
 					coords = ''
 					mapurl = get('MAP_INDEX')
 					
+					
 					def in_range(p):
 						d = distance.distance(p, sp)
 						print d
@@ -88,15 +92,15 @@ class SpreadsheetParser():
 							coords = p.findall(mapurl)
 							if len(coords) == 0 or not in_range(Point(*coords[0].split(","))): coords = ''
 					elif (row['location']):
-						try:
-							g = geocoders.Google()
+						#try:
+							g = geocoders.GoogleV3()
 							for place, (lat, lng) in g.geocode(unidecode(row['location']) + ", Sao Paulo, Brazil", exactly_one=False):
 								p = Point(lat, lng)
 								if (in_range(p)):
 									coords = [str(lat)+','+str(lng)]
 									break
-						except Exception:
-							print 'GQueryError'
+						#except Exception:
+						#	print 'GQueryError'
 					
 					
 					if (len(coords) and len(coords[0].split(",")) == 2):
