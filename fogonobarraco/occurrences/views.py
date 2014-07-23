@@ -20,7 +20,7 @@ def get(request):
 	return HttpResponse(simplejson.dumps({"success": True, "occurrences": all}),'application/json')
 
 def per_year(request):
-	qset = Occurrence.objects.values('year').order_by().annotate(Count('year'))
+	qset = Occurrence.objects.filter(status='P').values('year').order_by().annotate(Count('year'))
 	years = []
 	for item in qset:
 		years.append({'year': item['year'], 'count': item['year__count']})
