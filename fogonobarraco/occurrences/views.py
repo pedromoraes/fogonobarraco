@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.template.context import Context, RequestContext  
 from occurrences.models import *
 from django.http import HttpResponse
+from django.db.models import Count
 import simplejson
 
 def home(request):  
@@ -17,3 +18,10 @@ def get(request):
 	for occ in Occurrence.objects.filter(status='P'):
 		all.append(dict([(attr, getattr(occ, attr)) for attr in fields]))
 	return HttpResponse(simplejson.dumps({"success": True, "occurrences": all}),'application/json')
+
+def per_year(request):
+	qset = Occurrence.objects.values('year').order_by().annotate(Count('year'))
+	years = []
+	for item in qset:
+		years.append({'year': item['year'], 'count': item['year__count']})
+	return HttpResponse(simplejson.dumps({"success": True, "years": years}),'application/json')

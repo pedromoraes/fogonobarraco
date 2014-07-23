@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     (r'^$', 'occurrences.views.home'),  
+    (r'^per_year\.json', 'occurrences.views.per_year'),
     (r'^occurrences\.json', 'occurrences.views.get'),
     (r'^regions\.json', 'priceindexes.views.regions'),
     (r'^region/(?P<id>\d+)/indices\.json', 'priceindexes.views.indices'),
